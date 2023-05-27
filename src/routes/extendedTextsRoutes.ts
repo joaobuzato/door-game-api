@@ -1,10 +1,10 @@
 import { Router } from "express";
-import extendedTextsController from "../extendedTexts/extendedTextsController";
+import ExtendedTextsController from "../ExtendedText/ExtendedTextController";
 const extendedTextsRouter = Router();
-const controller = new extendedTextsController();
+const controller = new ExtendedTextsController();
 
-extendedTextsRouter.get("/extendedTexts", (request, response) => {
-  const body = controller.getAll([]);
+extendedTextsRouter.get("/extendedTexts", async (request, response) => {
+  const body = await controller.getAll();
   response.json(body);
   return response.status(200).send();
 });
