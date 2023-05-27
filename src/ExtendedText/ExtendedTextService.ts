@@ -1,3 +1,6 @@
+import { Repository } from "../Interfaces/Repository";
+import { Service } from "../Interfaces/Service";
+
 export class extendedTextService implements Service {
   repository: Repository;
   constructor(repository: Repository) {
@@ -6,6 +9,7 @@ export class extendedTextService implements Service {
   //talvez a conexão é com repository
   getAll = async () => {
     const items = await this.repository.getAll();
+    console.log(items);
     return items;
   };
   getById = async (id: number) => {

@@ -1,3 +1,5 @@
+import { Controller } from "../Interfaces/Controller";
+import { Service } from "../Interfaces/Service";
 import extendedTextRepository from "./ExtendedTextRepository";
 import extendedTextService from "./ExtendedTextService";
 

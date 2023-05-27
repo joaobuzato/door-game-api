@@ -1,10 +1,11 @@
 export class ExtendedText {
   public readonly id: number;
-  public name: string;
+  public text: string;
 
   constructor(props: Omit<ExtendedText, "id">, id?: number) {
     this.id = id ? id : 0; //uuid();
-    this.name = props.name;
+    this.text = props.text;
+    //console.log(this);
 
     // if (!id) {
     //   this.id = uuid();
