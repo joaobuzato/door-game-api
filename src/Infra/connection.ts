@@ -2,13 +2,9 @@ import mysql from "mysql";
 import dotenv from "dotenv";
 dotenv.config();
 
-export class dataBase {
-  connection: mysql.Connection;
-  constructor() {
-    this.connection = this.createConnection();
-  }
-
-  createConnection() {
+// TODO: pensar nessa conexão
+export class connection {
+  static connect() {
     return mysql.createConnection({
       database: process.env.DB_NAME,
       host: process.env.DB_HOST,
@@ -16,12 +12,5 @@ export class dataBase {
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
     });
-  }
-
-  async getConnection() {
-    if (!this.connection) {
-      this.connection = this.createConnection();
-    }
-    return this.connection;
   }
 }

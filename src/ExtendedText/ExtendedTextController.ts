@@ -1,5 +1,6 @@
 import { Controller } from "../Interfaces/Controller";
 import { Service } from "../Interfaces/Service";
+import { ExtendedText } from "./ExtendedText";
 import extendedTextRepository from "./ExtendedTextRepository";
 import extendedTextService from "./ExtendedTextService";
 
@@ -15,5 +16,8 @@ export default class ExtendedTextController implements Controller {
   };
   getById = async (id: number) => {
     return await this.service.getById(id);
+  };
+  insert = async (extendedText: ExtendedText) => {
+    await this.service.insert(extendedText);
   };
 }

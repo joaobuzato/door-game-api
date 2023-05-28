@@ -1,28 +1,66 @@
-import { dataBase } from "../Infra/dataBase";
+import { Connection } from "mysql";
+import { connection } from "../Infra/connection";
 import { Repository } from "../Interfaces/Repository";
 import { ExtendedText } from "./ExtendedText";
-const db = new dataBase();
 export class extendedTextRepository implements Repository {
-  constructor() {}
+  con: Connection;
+  constructor() {
+    this.con = connection.connect();
+  }
 
   getAll = async () => {
-    const connection = await db.getConnection();
-    const sql = "SELECT * FROM extended_texts";
+    const query = "SELECT * FROM extended_texts";
     const items: ExtendedText[] = [];
-    const result: [] = await new Promise((resolve, reject) => {
-      connection.query(sql, (err, result) => {
+    const result: ExtendedText[] = await new Promise((resolve, reject) => {
+      this.con.query(query, (err, result) => {
+        if (err) {
+          console.log(err);
+          reject([]);
+        }
         resolve(result);
       });
     });
     result.forEach((row: ExtendedText) => {
-      const text = new ExtendedText(row, row.id);
-      items.push(text);
+      const extendedText = this.mount(row);
+      items.push(extendedText);
     });
     return items;
   };
-  getById = async function (id: number) {
-    return { id: 1, text: "texto" }; //talvez parse pra Entity;
+  getById = async (id: number) => {
+    const query = `SELECT * FROM extended_texts WHERE id = ?`;
+    const result: ExtendedText[] = await new Promise((resolve, reject) => {
+      this.con.query(query, [id], (err, result) => {
+        if (err) {
+          console.log(err);
+          reject({});
+        }
+        resolve(result);
+      });
+    });
+    if (result.length > 0) {
+      return this.mount(result[0]);
+    }
+    return {};
   };
+  insert = async (extendedText: ExtendedText) => {
+    const query = `INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)`;
+    await new Promise((resolve, reject) => {
+      this.con.query(
+        query,
+        [extendedText.sentence, extendedText.text, extendedText.room_id],
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            reject();
+          }
+          resolve(result);
+        }
+      );
+    });
+  };
+  mount(row: ExtendedText) {
+    return new ExtendedText(row, row.id);
+  }
 }
 
 export default extendedTextRepository;
