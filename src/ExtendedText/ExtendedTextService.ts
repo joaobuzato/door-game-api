@@ -9,15 +9,27 @@ export class extendedTextService implements Service {
   }
   //talvez a conexão é com repository
   getAll = async () => {
-    const items = await this.repository.getAll();
-    return items;
+    try {
+      const items = await this.repository.getAll();
+      return items;
+    } catch (e) {
+      throw e;
+    }
   };
   getById = async (id: number) => {
-    const item = await this.repository.getById(id);
-    return item;
+    try {
+      const item = await this.repository.getById(id);
+      return item;
+    } catch (e) {
+      throw e;
+    }
   };
   insert = async (extendedText: ExtendedText) => {
-    await this.repository.insert(extendedText);
+    try {
+      this.repository.insert(extendedText);
+    } catch (e) {
+      throw e;
+    }
   };
 }
 

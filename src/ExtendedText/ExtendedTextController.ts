@@ -12,12 +12,24 @@ export default class ExtendedTextController implements Controller {
   }
 
   getAll = async () => {
-    return await this.service.getAll();
+    try {
+      return await this.service.getAll();
+    } catch (e) {
+      throw e;
+    }
   };
   getById = async (id: number) => {
-    return await this.service.getById(id);
+    try {
+      return await this.service.getById(id);
+    } catch (e) {
+      throw e;
+    }
   };
   insert = async (extendedText: ExtendedText) => {
-    await this.service.insert(extendedText);
+    try {
+      this.service.insert(extendedText);
+    } catch (e) {
+      throw e;
+    }
   };
 }
