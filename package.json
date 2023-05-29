@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest:watch",
     "prestart": "npm run build",
     "start": "nodemon dist/server.js",
     "build": "tsc --build"
@@ -15,6 +16,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jest-mock-extended": "^3.0.4",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22",
     "ts-jest": "^29.1.0",

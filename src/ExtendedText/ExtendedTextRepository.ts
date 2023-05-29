@@ -1,5 +1,5 @@
 import { Connection } from "mysql";
-import { DataBase } from "../Infra/DataBase";
+import DataBase from "../Infra/DataBase";
 import { Repository } from "../Interfaces/Repository";
 import { ExtendedText } from "./ExtendedText";
 export class ExtendedTextRepository implements Repository<ExtendedText> {

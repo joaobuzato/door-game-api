@@ -3,17 +3,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // TODO: pensar nessa conexão
-export class DataBase {
+export default class DataBase {
   connection: Connection;
   constructor() {
-    this.connection = mysql.createConnection({
+    this.connection = this.connect();
+  }
+  connect = () => {
+    return mysql.createConnection({
       database: process.env.DB_NAME,
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
     });
-  }
+  };
   query = async <T>(
     query: string,
     options: Array<string | number> = []

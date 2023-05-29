@@ -1,5 +1,5 @@
 import { Connection } from "mysql";
-import { DataBase } from "../Infra/DataBase";
+import DataBase from "../Infra/DataBase";
 
 export interface Repository<T> {
   dataBase: DataBase; //por enquanto;

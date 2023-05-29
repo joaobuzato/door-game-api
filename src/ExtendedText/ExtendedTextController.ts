@@ -1,4 +1,4 @@
-import { DataBase } from "../Infra/DataBase";
+import DataBase from "../Infra/DataBase";
 import { Controller } from "../Interfaces/Controller";
 import { Service } from "../Interfaces/Service";
 import { ExtendedText } from "./ExtendedText";
