@@ -2,16 +2,15 @@ import { Repository } from "../Interfaces/Repository";
 import { Service } from "../Interfaces/Service";
 import { ExtendedText } from "./ExtendedText";
 
-export class extendedTextService implements Service {
-  repository: Repository;
-  constructor(repository: Repository) {
+export class ExtendedTextService implements Service<ExtendedText> {
+  repository: Repository<ExtendedText>;
+  constructor(repository: Repository<ExtendedText>) {
     this.repository = repository;
   }
   //talvez a conexão é com repository
   getAll = async () => {
     try {
-      const items = await this.repository.getAll();
-      return items;
+      return await this.repository.getAll();
     } catch (e) {
       throw e;
     }
@@ -31,6 +30,20 @@ export class extendedTextService implements Service {
       throw e;
     }
   };
+  update = async (extendedText: ExtendedText) => {
+    try {
+      this.repository.update(extendedText);
+    } catch (e) {
+      throw e;
+    }
+  };
+  delete = async (id: number) => {
+    try {
+      this.repository.delete(id);
+    } catch (e) {
+      throw e;
+    }
+  };
 }
 
-export default extendedTextService;
+export default ExtendedTextService;

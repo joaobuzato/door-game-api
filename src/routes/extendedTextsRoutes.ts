@@ -23,7 +23,7 @@ extendedTextsRouter.get("/extendedTexts/:id", async (request, response) => {
     const { id } = request.params;
     if (id) {
       const body = await controller.getById(Number(id));
-      if (body.length === 0) {
+      if (!body) {
         response
           .json({ message: "extendedText não encontrado" })
           .status(404)
@@ -51,6 +51,36 @@ extendedTextsRouter.post("/extendedTexts", async (request, response) => {
     console.log(e);
     response
       .json({ message: "Erro ao salvar extendedText" })
+      .status(400)
+      .send();
+  }
+});
+
+extendedTextsRouter.put("/extendedTexts/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const extendedText = new ExtendedText(request.body, Number(id));
+    await controller.update(extendedText);
+    response.json({ message: "Atualizado!!" });
+    return response.status(204).send();
+  } catch (e) {
+    console.log(e);
+    response
+      .json({ message: "Erro ao atualizar extendedText" })
+      .status(400)
+      .send();
+  }
+});
+extendedTextsRouter.delete("/extendedTexts/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    await controller.delete(Number(id));
+    response.json({ message: "Deletado!!" });
+    return response.status(204).send();
+  } catch (e) {
+    console.log(e);
+    response
+      .json({ message: "Erro ao atualizar extendedText" })
       .status(400)
       .send();
   }

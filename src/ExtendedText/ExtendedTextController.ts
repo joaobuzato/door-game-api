@@ -1,14 +1,18 @@
+import { DataBase } from "../Infra/DataBase";
 import { Controller } from "../Interfaces/Controller";
 import { Service } from "../Interfaces/Service";
 import { ExtendedText } from "./ExtendedText";
-import extendedTextRepository from "./ExtendedTextRepository";
-import extendedTextService from "./ExtendedTextService";
+import ExtendedTextRepository from "./ExtendedTextRepository";
+import ExtendedTextService from "./ExtendedTextService";
 
-export default class ExtendedTextController implements Controller {
-  service: Service;
+export default class ExtendedTextController
+  implements Controller<ExtendedText>
+{
+  service: Service<ExtendedText>;
   constructor() {
-    const repository = new extendedTextRepository();
-    this.service = new extendedTextService(repository);
+    const database = new DataBase();
+    const repository = new ExtendedTextRepository(database);
+    this.service = new ExtendedTextService(repository);
   }
 
   getAll = async () => {
@@ -28,6 +32,20 @@ export default class ExtendedTextController implements Controller {
   insert = async (extendedText: ExtendedText) => {
     try {
       this.service.insert(extendedText);
+    } catch (e) {
+      throw e;
+    }
+  };
+  update = async (extendedText: ExtendedText) => {
+    try {
+      this.service.update(extendedText);
+    } catch (e) {
+      throw e;
+    }
+  };
+  delete = async (id: number) => {
+    try {
+      return this.service.delete(id);
     } catch (e) {
       throw e;
     }

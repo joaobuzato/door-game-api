@@ -4,10 +4,10 @@
   "description": "API que servirá de base para a construção da door-game",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "prestart": "npm run build",
     "start": "nodemon dist/server.js",
-    "build": "tsc"
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "express": "^4.18.2",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
