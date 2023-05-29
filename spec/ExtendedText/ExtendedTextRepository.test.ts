@@ -36,7 +36,7 @@ describe("extendedTextRepository", () => {
         "SELECT * FROM extended_texts"
       );
     });
-    test("should throw if promise rejected", async () => {
+    test("should throw if promise is rejected", async () => {
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
       await expect(repository.getAll()).rejects.toThrow(errorMessage);
