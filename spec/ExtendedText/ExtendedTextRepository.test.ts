@@ -23,13 +23,26 @@ describe("extendedTextRepository", () => {
     ];
 
     const databaseMock = mock<DataBase>();
-    databaseMock.query.mockResolvedValue(extendedTexts);
     const repository = new ExtendedTextRepository(databaseMock);
 
-    beforeEach(() => {});
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
     test("should getAll correctly", async () => {
+      databaseMock.query.mockResolvedValue(extendedTexts);
       const result = await repository.getAll();
       expect(result).toEqual(extendedTexts);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM extended_texts"
+      );
+    });
+    test("should throw if promise rejected", async () => {
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM extended_texts"
+      );
     });
   });
 });
