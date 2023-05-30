@@ -30,7 +30,9 @@ describe("extendedTextRepository", () => {
     });
     test("should getAll correctly", async () => {
       databaseMock.query.mockResolvedValue(extendedTexts);
+
       const result = await repository.getAll();
+
       expect(result).toEqual(extendedTexts);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM extended_texts"
@@ -39,9 +41,113 @@ describe("extendedTextRepository", () => {
     test("should throw if promise is rejected", async () => {
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
       await expect(repository.getAll()).rejects.toThrow(errorMessage);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM extended_texts"
+      );
+    });
+  });
+  describe("getById", () => {
+    const extendedTexts: ExtendedText[] = [
+      {
+        id: 1,
+        sentence: "sentence1",
+        text: "text1",
+        room_id: 1,
+      },
+    ];
+
+    const databaseMock = mock<DataBase>();
+    const repository = new ExtendedTextRepository(databaseMock);
+
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should getById correctly", async () => {
+      const id = 1;
+      databaseMock.query.mockResolvedValue(extendedTexts);
+
+      const result = await repository.getById(id);
+
+      expect(result).toEqual(extendedTexts[0]);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM extended_texts WHERE id = ?",
+        [id]
+      );
+    });
+    test("should throw if promise is rejected", async () => {
+      const id = 1;
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
+      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM extended_texts WHERE id = ?",
+        [id]
+      );
+    });
+    test("should return null if there is no extendedText", async () => {
+      const id = 1;
+      databaseMock.query.mockResolvedValue([]);
+
+      const result = await repository.getById(id);
+
+      expect(result).toEqual(null);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM extended_texts WHERE id = ?",
+        [id]
+      );
+    });
+  });
+  describe("insert", () => {
+    const extendedTexts: ExtendedText[] = [
+      {
+        id: 1,
+        sentence: "sentence1",
+        text: "text1",
+        room_id: 1,
+      },
+    ];
+
+    const databaseMock = mock<DataBase>();
+    const repository = new ExtendedTextRepository(databaseMock);
+
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should insert correctly", async () => {
+      databaseMock.query.mockResolvedValue(extendedTexts);
+
+      const extendedText = new ExtendedText({
+        sentence: "sentence",
+        room_id: 1,
+        text: "text",
+      });
+      const result = await repository.insert(extendedText);
+
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)",
+        [extendedText.sentence, extendedText.text, extendedText.room_id]
+      );
+    });
+
+    test("should throw if promise is rejected", async () => {
+      const id = 1;
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      const extendedText = new ExtendedText({
+        sentence: "sentence",
+        room_id: 1,
+        text: "text",
+      });
+
+      await expect(repository.insert(extendedText)).rejects.toThrow(
+        errorMessage
+      );
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)",
+        [extendedText.sentence, extendedText.text, extendedText.room_id]
       );
     });
   });
