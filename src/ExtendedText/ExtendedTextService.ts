@@ -27,7 +27,7 @@ export class ExtendedTextService implements Service<ExtendedText> {
       if (!this.validate(extendedText)) {
         throw new Error("extendedText Inválido");
       }
-      this.repository.insert(extendedText);
+      await this.repository.insert(extendedText);
     } catch (e) {
       throw e;
     }
@@ -59,6 +59,9 @@ export class ExtendedTextService implements Service<ExtendedText> {
       1 > extendedText.sentence.length ||
       extendedText.sentence.length > 140
     ) {
+      valid = false;
+    }
+    if (extendedText.room_id < 1) {
       valid = false;
     }
     return valid;

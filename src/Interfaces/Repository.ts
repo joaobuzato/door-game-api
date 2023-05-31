@@ -1,4 +1,3 @@
-import { Connection } from "mysql";
 import DataBase from "../Infra/DataBase";
 
 export interface Repository<T> {
