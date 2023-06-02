@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { extendedTextsRouter } from "./extendedTextsRoutes";
+import { extendedTextsRouter } from "./extendedTextRoutes";
 
 export default class routes {
   app: any;
