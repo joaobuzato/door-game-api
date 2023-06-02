@@ -119,7 +119,7 @@ describe("extendedTextRepository", () => {
     test("should insert Correctly", async () => {
       repositoryMock.insert.mockResolvedValue();
 
-      const result = await service.insert(extendedText);
+      await service.insert(extendedText);
 
       expect(repositoryMock.insert).toBeCalledWith(extendedText);
     });
@@ -138,6 +138,62 @@ describe("extendedTextRepository", () => {
 
       await expect(service.insert(extendedText)).rejects.toThrow(errorMessage);
       expect(repositoryMock.insert).toBeCalledWith(extendedText);
+    });
+  });
+  describe("update", () => {
+    const extendedText: ExtendedText = {
+      id: 1,
+      sentence: "sentence1",
+      text: "text1",
+      room_id: 1,
+    };
+    beforeEach(() => {
+      repositoryMock.update.mockClear();
+    });
+    test("should update Correctly", async () => {
+      repositoryMock.update.mockResolvedValue();
+
+      await service.update(extendedText);
+
+      expect(repositoryMock.update).toBeCalledWith(extendedText);
+    });
+    test("should throw error if text is not valid", async () => {
+      const extendedTextTest = { ...extendedText, text: "" };
+      await expect(service.update(extendedTextTest)).rejects.toThrow(
+        "extendedText Inválido"
+      );
+      expect(repositoryMock.update).toBeCalledTimes(0);
+    });
+    test("should propagate error if there is a throw in repository", async () => {
+      const errorMessage = "Repository Call Error";
+      repositoryMock.update.mockImplementation(() => {
+        throw new Error(errorMessage);
+      });
+
+      await expect(service.update(extendedText)).rejects.toThrow(errorMessage);
+      expect(repositoryMock.update).toBeCalledWith(extendedText);
+    });
+  });
+  describe("delete", () => {
+    const id = 1;
+    beforeEach(() => {
+      repositoryMock.delete.mockClear();
+    });
+    test("should delete correctly", async () => {
+      repositoryMock.delete.mockResolvedValue();
+
+      const result = await service.delete(id);
+
+      expect(repositoryMock.delete).toBeCalledWith(id);
+    });
+    test("should propagate error if there is a throw in repository", async () => {
+      const errorMessage = "Repository Call Error";
+      repositoryMock.delete.mockImplementation(() => {
+        throw new Error(errorMessage);
+      });
+
+      await expect(service.delete(id)).rejects.toThrow(errorMessage);
+      expect(repositoryMock.delete).toBeCalledWith(id);
     });
   });
 });
