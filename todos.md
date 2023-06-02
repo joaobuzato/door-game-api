@@ -12,29 +12,29 @@
 
 ### Controller
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
 
 ### Service
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
-- [ ] validade(obj)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
+- [x] validade(obj)
 
 ### Service
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
-- [ ] mount(object)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
+- [x] mount(object)
 
 ## Actions:
 
