@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { ExtendedText } from "../ExtendedText/ExtendedText";
-import ExtendedTextsController from "../ExtendedText/ExtendedTextController";
+import ExtendedTextController from "../ExtendedText/ExtendedTextController";
 const extendedTextsRouter = Router();
-const controller = new ExtendedTextsController();
+const controller = new ExtendedTextController();
 
 extendedTextsRouter.get("/extendedTexts", async (request, response) => {
   try {
@@ -12,8 +12,8 @@ extendedTextsRouter.get("/extendedTexts", async (request, response) => {
   } catch (e) {
     console.log(e);
     response
-      .json({ message: "Erro ao obter extendedTexts" })
       .status(400)
+      .json({ message: "Erro ao obter extendedTexts" })
       .send();
   }
 });
@@ -25,8 +25,8 @@ extendedTextsRouter.get("/extendedTexts/:id", async (request, response) => {
       const body = await controller.getById(Number(id));
       if (!body) {
         response
-          .json({ message: "extendedText não encontrado" })
           .status(404)
+          .json({ message: "extendedText não encontrado" })
           .send();
       }
       response.json(body);

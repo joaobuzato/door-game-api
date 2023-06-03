@@ -7,22 +7,22 @@ export class ExtendedTextService implements Service<ExtendedText> {
   constructor(repository: Repository<ExtendedText>) {
     this.repository = repository;
   }
-  getAll = async () => {
+  async getAll() {
     try {
       return await this.repository.getAll();
     } catch (e) {
       throw e;
     }
-  };
-  getById = async (id: number) => {
+  }
+  async getById(id: number) {
     try {
       const item = await this.repository.getById(id);
       return item;
     } catch (e) {
       throw e;
     }
-  };
-  insert = async (extendedText: ExtendedText) => {
+  }
+  async insert(extendedText: ExtendedText) {
     try {
       if (!this.validate(extendedText)) {
         throw new Error("extendedText Inválido");
@@ -31,8 +31,8 @@ export class ExtendedTextService implements Service<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  update = async (extendedText: ExtendedText) => {
+  }
+  async update(extendedText: ExtendedText) {
     try {
       if (!this.validate(extendedText)) {
         throw new Error("extendedText Inválido");
@@ -41,14 +41,14 @@ export class ExtendedTextService implements Service<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  delete = async (id: number) => {
+  }
+  async delete(id: number) {
     try {
       this.repository.delete(id);
     } catch (e) {
       throw e;
     }
-  };
+  }
 
   validate = (extendedText: ExtendedText) => {
     let valid = true;

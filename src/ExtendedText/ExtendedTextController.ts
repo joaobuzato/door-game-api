@@ -15,39 +15,39 @@ export default class ExtendedTextController
     this.service = new ExtendedTextService(repository);
   }
 
-  getAll = async () => {
+  async getAll() {
     try {
       return await this.service.getAll();
     } catch (e) {
       throw e;
     }
-  };
-  getById = async (id: number) => {
+  }
+  async getById(id: number) {
     try {
       return await this.service.getById(id);
     } catch (e) {
       throw e;
     }
-  };
-  insert = async (extendedText: ExtendedText) => {
+  }
+  async insert(extendedText: ExtendedText) {
     try {
       this.service.insert(extendedText);
     } catch (e) {
       throw e;
     }
-  };
-  update = async (extendedText: ExtendedText) => {
+  }
+  async update(extendedText: ExtendedText) {
     try {
       this.service.update(extendedText);
     } catch (e) {
       throw e;
     }
-  };
-  delete = async (id: number) => {
+  }
+  async delete(id: number) {
     try {
       return this.service.delete(id);
     } catch (e) {
       throw e;
     }
-  };
+  }
 }

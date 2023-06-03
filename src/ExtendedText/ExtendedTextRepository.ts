@@ -8,7 +8,7 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     this.dataBase = dataBase;
   }
 
-  getAll = async () => {
+  async getAll() {
     try {
       const query = "SELECT * FROM extended_texts";
       const items: ExtendedText[] = [];
@@ -23,8 +23,8 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  getById = async (id: number) => {
+  }
+  async getById(id: number) {
     try {
       const query = `SELECT * FROM extended_texts WHERE id = ?`;
       const result: ExtendedText[] = await this.dataBase.query<ExtendedText>(
@@ -38,8 +38,8 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  insert = async (extendedText: ExtendedText) => {
+  }
+  async insert(extendedText: ExtendedText) {
     try {
       const query = `INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)`;
       await this.dataBase.query<ExtendedText>(query, [
@@ -50,8 +50,8 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  update = async (extendedText: ExtendedText) => {
+  }
+  async update(extendedText: ExtendedText) {
     try {
       const query = `UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?`;
       await this.dataBase.query<ExtendedText>(query, [
@@ -62,15 +62,15 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     } catch (e) {
       throw e;
     }
-  };
-  delete = async (id: number) => {
+  }
+  async delete(id: number) {
     try {
       const query = `DELETE FROM extended_texts WHERE id = ?`;
       await await this.dataBase.query<ExtendedText>(query, [id]);
     } catch (e) {
       throw e;
     }
-  };
+  }
 
   mount(row: ExtendedText) {
     return new ExtendedText(row, row.id);

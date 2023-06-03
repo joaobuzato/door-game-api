@@ -2,9 +2,6 @@ import { describe, expect, test } from "@jest/globals";
 import { ExtendedText } from "../../src/ExtendedText/ExtendedText";
 
 import ExtendedTextController from "../../src/ExtendedText/ExtendedTextController";
-import { ExtendedTextService } from "../../src/ExtendedText/ExtendedTextService";
-import { mock } from "jest-mock-extended";
-import ExtendedTextRepository from "../../src/ExtendedText/ExtendedTextRepository";
 jest.mock("../../src/ExtendedText/ExtendedTextService");
 
 describe("extendedTextRepository", () => {
