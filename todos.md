@@ -4,7 +4,7 @@
 
 ### Routes
 
-- [ ] GET /extendedTexts
+- [x] GET /extendedTexts
 - [ ] GET /extendedTexts/:id
 - [ ] POST /extendedTexts
 - [ ] PUT /extendedTexts/:id

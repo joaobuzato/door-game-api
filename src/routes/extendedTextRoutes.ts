@@ -37,7 +37,7 @@ extendedTextsRouter.get("/extendedTexts/:id", async (request, response) => {
     return response.status(400).send();
   } catch (e) {
     console.log(e);
-    response.json({ message: "Erro ao obter extendedText" }).status(400).send();
+    response.status(400).json({ message: "Erro ao obter extendedText" }).send();
   }
 });
 

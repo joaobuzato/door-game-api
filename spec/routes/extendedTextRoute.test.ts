@@ -5,6 +5,7 @@ import ExtendedTextController from "../../src/ExtendedText/ExtendedTextControlle
 jest.mock("../../src/ExtendedText/ExtendedTextController");
 
 describe("GET /extendedTexts", () => {
+  let getAllSpy: jest.SpyInstance;
   const extendedTexts: ExtendedText[] = [
     {
       id: 1,
@@ -19,26 +20,71 @@ describe("GET /extendedTexts", () => {
       room_id: 2,
     },
   ];
+  beforeEach(() => {
+    getAllSpy = jest.spyOn(ExtendedTextController.prototype, "getAll");
+  });
+  afterEach(() => {
+    getAllSpy.mockClear();
+  });
   test("should respond with JSON data and status 200", async () => {
-    jest
-      .spyOn(ExtendedTextController.prototype, "getAll")
-      .mockResolvedValue(extendedTexts);
+    getAllSpy.mockResolvedValue(extendedTexts);
+
     const response = await request(app).get("/extendedTexts");
+
     expect(response.status).toBe(200);
     expect(response.type).toBe("application/json");
     expect(response.body).toEqual(extendedTexts);
-    // Add any additional assertions for the response body, if necessary
   });
 
   test("should handle errors and respond with JSON data and status 400", async () => {
-    // Mocking the controller to throw an error
-    jest
-      .spyOn(ExtendedTextController.prototype, "getAll")
-      .mockRejectedValue(new Error("error"));
+    getAllSpy.mockRejectedValue(new Error("error"));
+
     const response = await request(app).get("/extendedTexts");
 
     expect(response.type).toBe("application/json");
     expect(response.body).toEqual({ message: "Erro ao obter extendedTexts" });
+    expect(response.status).toBe(400);
+  });
+});
+
+describe("GET /extendedTexts/:id", () => {
+  let getByIdSpy: jest.SpyInstance;
+  const id = 1;
+  const extendedText: ExtendedText = {
+    id: 1,
+    sentence: "sentence1",
+    text: "text1",
+    room_id: 1,
+  };
+  beforeEach(() => {
+    getByIdSpy = jest.spyOn(ExtendedTextController.prototype, "getById");
+  });
+  afterEach(() => {
+    getByIdSpy.mockClear();
+  });
+  test("should respond with JSON data and status 200", async () => {
+    getByIdSpy.mockResolvedValue(extendedText);
+
+    const response = await request(app).get(`/extendedTexts/${id}`);
+
+    expect(response.status).toBe(200);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual(extendedText);
+    expect(getByIdSpy).toBeCalledTimes(1);
+    expect(getByIdSpy).toBeCalledWith(id);
+    // Add any additional assertions for the response body, if necessary
+  });
+
+  test("should handle errors and respond with JSON data and status 400", async () => {
+    const id = 1;
+    getByIdSpy.mockRejectedValue(new Error("error"));
+
+    const response = await request(app).get(`/extendedTexts/${id}`);
+
+    expect(getByIdSpy).toBeCalledTimes(1);
+    expect(getByIdSpy).toBeCalledWith(id);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual({ message: "Erro ao obter extendedText" });
     expect(response.status).toBe(400);
   });
 });
