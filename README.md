@@ -16,6 +16,15 @@ A única biblioteca de testes implementada foi o jest, que usa o jest-mock-expan
 
 npm test
 
+# Hooks
+
+Há o husky instalado, para rodar os hooks de pré-commit.
+
+## utilidades:
+
+1. git config --global alias.send '!git add -A && git commit'
+2. adicione um commit com o 'git send -m"commit".
+
 # enpoints
 
 1. **GET /extendedTexts**

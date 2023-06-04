@@ -88,3 +88,47 @@ describe("GET /extendedTexts/:id", () => {
     expect(response.status).toBe(400);
   });
 });
+
+describe("POST /extendedTexts", () => {
+  let insertSpy: jest.SpyInstance;
+  const id = 1;
+  const extendedText = new ExtendedText({
+    sentence: "sentence1",
+    text: "text1",
+    room_id: 1,
+  });
+  beforeEach(() => {
+    insertSpy = jest.spyOn(ExtendedTextController.prototype, "insert");
+  });
+  afterEach(() => {
+    insertSpy.mockClear();
+  });
+  test("should respond with success when inserted successfully", async () => {
+    insertSpy.mockResolvedValue(null);
+
+    const response = await request(app)
+      .post(`/extendedTexts`)
+      .set("Content-type", "application/json")
+      .send(extendedText);
+
+    expect(response.status).toBe(200);
+    expect(response.type).toBe("application/json");
+    expect(insertSpy).toBeCalledTimes(1);
+    expect(insertSpy).toBeCalledWith(extendedText);
+    // Add any additional assertions for the response body, if necessary
+  });
+
+  test("should handle errors and respond with JSON data and status 400", async () => {
+    insertSpy.mockRejectedValue(new Error("error"));
+
+    const response = await request(app)
+      .post(`/extendedTexts`)
+      .set("Content-type", "application/json")
+      .send(extendedText);
+
+    expect(insertSpy).toBeCalledTimes(1);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual({ message: "Erro ao salvar extendedText" });
+    expect(response.status).toBe(400);
+  });
+});

@@ -33,8 +33,10 @@ extendedTextsRouter.get("/extendedTexts/:id", async (request, response) => {
       return response.status(200).send();
     }
 
-    response.json({ message: "O id informado não é válido." });
-    return response.status(400).send();
+    return response
+      .status(400)
+      .json({ message: "O id informado não é válido." })
+      .send();
   } catch (e) {
     console.log(e);
     response.status(400).json({ message: "Erro ao obter extendedText" }).send();
@@ -50,8 +52,8 @@ extendedTextsRouter.post("/extendedTexts", async (request, response) => {
   } catch (e) {
     console.log(e);
     response
-      .json({ message: "Erro ao salvar extendedText" })
       .status(400)
+      .json({ message: "Erro ao salvar extendedText" })
       .send();
   }
 });
@@ -66,8 +68,8 @@ extendedTextsRouter.put("/extendedTexts/:id", async (request, response) => {
   } catch (e) {
     console.log(e);
     response
-      .json({ message: "Erro ao atualizar extendedText" })
       .status(400)
+      .json({ message: "Erro ao atualizar extendedText" })
       .send();
   }
 });
@@ -80,8 +82,8 @@ extendedTextsRouter.delete("/extendedTexts/:id", async (request, response) => {
   } catch (e) {
     console.log(e);
     response
-      .json({ message: "Erro ao atualizar extendedText" })
       .status(400)
+      .json({ message: "Erro ao atualizar extendedText" })
       .send();
   }
 });
