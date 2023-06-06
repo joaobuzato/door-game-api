@@ -1,4 +1,5 @@
 # Logs
+/logs.csv
 logs
 *.log
 npm-debug.log*
@@ -128,4 +129,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-.logger.csv
