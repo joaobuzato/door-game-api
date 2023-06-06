@@ -1,9 +1,11 @@
 import * as fs from "fs";
+import * as path from "path";
 
 export function log(text: string) {
-  const row = `\n${text}`;
-
-  fs.appendFile("../logger.csv", row, (err) => {
+  const row = `\n${text};`;
+  const filePath = path.join(__dirname, "..", "logger.csv");
+  fs.appendFile(filePath, row, (err) => {
+    console.log(row);
     if (err) {
       console.error(`ErrorWriting CSV: ${err}`);
     }
