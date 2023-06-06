@@ -38,7 +38,7 @@ export default class ExtendedTextController
   }
   async update(extendedText: ExtendedText) {
     try {
-      this.service.update(extendedText);
+      await this.service.update(extendedText);
     } catch (e) {
       throw e;
     }

@@ -25,7 +25,7 @@ export default class DataBase {
       this.connection.query(query, options, (err, result) => {
         if (err) {
           console.log(err);
-          reject([]);
+          reject(err);
         }
         resolve(result);
       });

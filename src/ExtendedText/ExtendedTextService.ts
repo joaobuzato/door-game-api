@@ -37,7 +37,7 @@ export class ExtendedTextService implements Service<ExtendedText> {
       if (!this.validate(extendedText)) {
         throw new Error("extendedText Inválido");
       }
-      this.repository.update(extendedText);
+      await this.repository.update(extendedText);
     } catch (e) {
       throw e;
     }

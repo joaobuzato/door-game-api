@@ -159,7 +159,12 @@ describe("extendedTextRepository", () => {
 
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?",
-        [extendedText.sentence, extendedText.text, extendedText.room_id]
+        [
+          extendedText.sentence,
+          extendedText.text,
+          extendedText.room_id,
+          extendedText.id,
+        ]
       );
     });
 
@@ -177,7 +182,12 @@ describe("extendedTextRepository", () => {
       );
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?",
-        [extendedText.sentence, extendedText.text, extendedText.room_id]
+        [
+          extendedText.sentence,
+          extendedText.text,
+          extendedText.room_id,
+          extendedText.id,
+        ]
       );
     });
   });

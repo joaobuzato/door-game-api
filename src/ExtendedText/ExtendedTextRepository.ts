@@ -58,6 +58,7 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
         extendedText.sentence,
         extendedText.text,
         extendedText.room_id,
+        extendedText.id || 0,
       ]);
     } catch (e) {
       throw e;
