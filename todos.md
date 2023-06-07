@@ -5,10 +5,10 @@
 ### Routes
 
 - [x] GET /extendedTexts
-- [ ] GET /extendedTexts/:id
-- [ ] POST /extendedTexts
-- [ ] PUT /extendedTexts/:id
-- [ ] DELETE /extendedTexts/:id
+- [x] GET /extendedTexts/:id
+- [x] POST /extendedTexts
+- [x] PUT /extendedTexts/:id
+- [x] DELETE /extendedTexts/:id
 
 ### Controller
 
@@ -27,7 +27,7 @@
 - [x] delete(id)
 - [x] validade(obj)
 
-### Service
+### Repository
 
 - [x] getAll()
 - [x] getById(id)
@@ -63,11 +63,11 @@
 - [ ] delete(id)
 - [ ] validate(obj)
 
-### Service
+### Repository
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
-- [ ] mount(object)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
+- [x] mount(object)
