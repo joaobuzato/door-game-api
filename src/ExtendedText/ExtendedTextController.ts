@@ -16,38 +16,18 @@ export default class ExtendedTextController
   }
 
   async getAll() {
-    try {
-      return await this.service.getAll();
-    } catch (e) {
-      throw e;
-    }
+    return await this.service.getAll();
   }
   async getById(id: number) {
-    try {
-      return await this.service.getById(id);
-    } catch (e) {
-      throw e;
-    }
+    return await this.service.getById(id);
   }
   async insert(extendedText: ExtendedText) {
-    try {
-      this.service.insert(extendedText);
-    } catch (e) {
-      throw e;
-    }
+    this.service.insert(extendedText);
   }
   async update(extendedText: ExtendedText) {
-    try {
-      await this.service.update(extendedText);
-    } catch (e) {
-      throw e;
-    }
+    await this.service.update(extendedText);
   }
   async delete(id: number) {
-    try {
-      return this.service.delete(id);
-    } catch (e) {
-      throw e;
-    }
+    return this.service.delete(id);
   }
 }

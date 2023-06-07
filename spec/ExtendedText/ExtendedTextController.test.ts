@@ -23,7 +23,6 @@ describe("extendedTextRepository", () => {
       },
     ];
 
-    beforeAll(() => {});
     test("should getAll Correctly", async () => {
       controller.service.getAll = jest
         .fn()
@@ -79,7 +78,7 @@ describe("extendedTextRepository", () => {
       room_id: 1,
     };
     test("should insert Correctly", async () => {
-      controller.service.insert = jest.fn().mockImplementationOnce(() => {});
+      controller.service.insert = jest.fn();
 
       await controller.insert(extendedText);
 
@@ -105,7 +104,7 @@ describe("extendedTextRepository", () => {
       room_id: 1,
     };
     test("should update Correctly", async () => {
-      controller.service.update = jest.fn().mockImplementationOnce(() => {});
+      controller.service.update = jest.fn();
 
       await controller.update(extendedText);
 
@@ -126,9 +125,9 @@ describe("extendedTextRepository", () => {
   describe("delete", () => {
     const id = 1;
     test("should delete correctly", async () => {
-      controller.service.delete = jest.fn().mockImplementationOnce(() => {});
+      controller.service.delete = jest.fn();
 
-      const result = await controller.delete(id);
+      await controller.delete(id);
 
       expect(controller.service.delete).toBeCalledWith(id);
     });

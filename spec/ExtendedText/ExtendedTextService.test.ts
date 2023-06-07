@@ -182,7 +182,7 @@ describe("extendedTextRepository", () => {
     test("should delete correctly", async () => {
       repositoryMock.delete.mockResolvedValue();
 
-      const result = await service.delete(id);
+      await service.delete(id);
 
       expect(repositoryMock.delete).toBeCalledWith(id);
     });

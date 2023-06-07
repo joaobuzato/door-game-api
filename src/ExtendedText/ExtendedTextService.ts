@@ -8,46 +8,26 @@ export class ExtendedTextService implements Service<ExtendedText> {
     this.repository = repository;
   }
   async getAll() {
-    try {
-      return await this.repository.getAll();
-    } catch (e) {
-      throw e;
-    }
+    return await this.repository.getAll();
   }
   async getById(id: number) {
-    try {
-      const item = await this.repository.getById(id);
-      return item;
-    } catch (e) {
-      throw e;
-    }
+    const item = await this.repository.getById(id);
+    return item;
   }
   async insert(extendedText: ExtendedText) {
-    try {
-      if (!this.validate(extendedText)) {
-        throw new Error("extendedText Inválido");
-      }
-      await this.repository.insert(extendedText);
-    } catch (e) {
-      throw e;
+    if (!this.validate(extendedText)) {
+      throw new Error("extendedText Inválido");
     }
+    await this.repository.insert(extendedText);
   }
   async update(extendedText: ExtendedText) {
-    try {
-      if (!this.validate(extendedText)) {
-        throw new Error("extendedText Inválido");
-      }
-      await this.repository.update(extendedText);
-    } catch (e) {
-      throw e;
+    if (!this.validate(extendedText)) {
+      throw new Error("extendedText Inválido");
     }
+    await this.repository.update(extendedText);
   }
   async delete(id: number) {
-    try {
-      this.repository.delete(id);
-    } catch (e) {
-      throw e;
-    }
+    this.repository.delete(id);
   }
 
   validate = (extendedText: ExtendedText) => {
