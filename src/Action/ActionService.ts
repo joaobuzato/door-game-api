@@ -18,7 +18,7 @@ export class ActionService implements Service<Action> {
     if (!this.validate(action)) {
       throw new Error("action Inválido");
     }
-    await this.repository.insert(action);
+    return await this.repository.insert(action);
   }
   async update(action: Action) {
     if (!this.validate(action)) {
@@ -32,19 +32,29 @@ export class ActionService implements Service<Action> {
 
   validate = (action: Action) => {
     let valid = true;
-    if (!["get", "use"].includes(action.type)) {
+    console.log(Object.keys(action));
+
+    if (!action.type || !["get", "use"].includes(action.type)) {
       valid = false;
     }
-    if (1 > action.button_text.length || action.button_text.length >= 140) {
+    if (
+      !action.button_text ||
+      1 > action.button_text.length ||
+      action.button_text.length >= 140
+    ) {
       valid = false;
     }
-    if (1 > action.element.length || action.element.length >= 140) {
+    if (
+      !action.element ||
+      1 > action.element.length ||
+      action.element.length >= 140
+    ) {
       valid = false;
     }
-    if (action.qtd < 1) {
+    if (!action.qtd || action.qtd < 1) {
       valid = false;
     }
-    if (action.room_id < 1) {
+    if (!action.room_id || action.room_id < 1) {
       valid = false;
     }
     return valid;

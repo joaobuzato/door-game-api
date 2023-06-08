@@ -22,12 +22,12 @@ export default class ExtendedTextController
     return await this.service.getById(id);
   }
   async insert(extendedText: ExtendedText) {
-    this.service.insert(extendedText);
+    return await this.service.insert(extendedText);
   }
   async update(extendedText: ExtendedText) {
-    await this.service.update(extendedText);
+    return await this.service.update(extendedText);
   }
   async delete(id: number) {
-    return this.service.delete(id);
+    return await this.service.delete(id);
   }
 }

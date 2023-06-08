@@ -40,11 +40,11 @@
 
 ### Routes
 
-- [ ] GET /actions
-- [ ] GET /actions/:id
-- [ ] POST /actions
-- [ ] PUT /actions/:id
-- [ ] DELETE /actions/:id
+- [x] GET /actions
+- [x] GET /actions/:id
+- [x] POST /actions
+- [x] PUT /actions/:id
+- [x] DELETE /actions/:id
 
 ### Controller
 
@@ -71,3 +71,39 @@
 - [x] update(id)
 - [x] delete(id)
 - [x] mount(object)
+
+## Conditions:
+
+### Routes
+
+- [ ] GET /conditions
+- [ ] GET /conditions/:id
+- [ ] POST /conditions
+- [ ] PUT /conditions/:id
+- [ ] DELETE /conditions/:id
+
+### Controller
+
+- [ ] getAll()
+- [ ] getById(id)
+- [ ] insert()
+- [ ] update(id)
+- [ ] delete(id)
+
+### Service
+
+- [ ] getAll()
+- [ ] getById(id)
+- [ ] insert()
+- [ ] update(id)
+- [ ] delete(id)
+- [ ] validate(obj)
+
+### Repository
+
+- [ ] getAll()
+- [ ] getById(id)
+- [ ] insert()
+- [ ] update(id)
+- [ ] delete(id)
+- [ ] mount(object)

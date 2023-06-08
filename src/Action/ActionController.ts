@@ -20,12 +20,12 @@ export default class ActionController implements Controller<Action> {
     return await this.service.getById(id);
   }
   async insert(action: Action) {
-    this.service.insert(action);
+    return await this.service.insert(action);
   }
   async update(action: Action) {
-    await this.service.update(action);
+    return await this.service.update(action);
   }
   async delete(id: number) {
-    return this.service.delete(id);
+    return await this.service.delete(id);
   }
 }

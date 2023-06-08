@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { extendedTextsRouter } from "./extendedTextRoutes";
+import { extendedTextsRouter } from "./extendedTextRouter";
+import { actionsRouter } from "./actionRouter";
 
 export default class routes {
   app: any;
@@ -14,5 +15,6 @@ export default class routes {
 
     this.app.use(this.router);
     this.app.use(extendedTextsRouter);
+    this.app.use(actionsRouter);
   }
 }

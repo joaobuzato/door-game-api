@@ -18,33 +18,37 @@ export class ExtendedTextService implements Service<ExtendedText> {
     if (!this.validate(extendedText)) {
       throw new Error("extendedText Inválido");
     }
-    await this.repository.insert(extendedText);
+    return await this.repository.insert(extendedText);
   }
   async update(extendedText: ExtendedText) {
     if (!this.validate(extendedText)) {
       throw new Error("extendedText Inválido");
     }
-    await this.repository.update(extendedText);
+    return await this.repository.update(extendedText);
   }
   async delete(id: number) {
-    this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 
   validate = (extendedText: ExtendedText) => {
-    let valid = true;
-    if (1 > extendedText.text.length || extendedText.text.length > 280) {
-      valid = false;
+    if (
+      !extendedText.text ||
+      1 > extendedText.text.length ||
+      extendedText.text.length > 280
+    ) {
+      return false;
     }
     if (
+      !extendedText.sentence ||
       1 > extendedText.sentence.length ||
       extendedText.sentence.length > 140
     ) {
-      valid = false;
+      return false;
     }
     if (extendedText.room_id < 1) {
-      valid = false;
+      return false;
     }
-    return valid;
+    return true;
   };
 }
 
