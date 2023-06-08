@@ -48,11 +48,11 @@
 
 ### Controller
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
 
 ### Service
 
