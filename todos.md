@@ -56,12 +56,12 @@
 
 ### Service
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
-- [ ] validate(obj)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
+- [x] validate(obj)
 
 ### Repository
 

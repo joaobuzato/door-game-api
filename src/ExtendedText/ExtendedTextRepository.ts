@@ -1,4 +1,3 @@
-import { Connection } from "mysql";
 import DataBase from "../Infra/DataBase";
 import { Repository } from "../Interfaces/Repository";
 import { ExtendedText } from "./ExtendedText";
