@@ -2,6 +2,7 @@ import { describe, expect, test } from "@jest/globals";
 import { Action } from "../../src/Action/Action";
 
 import { ActionRepository } from "../../src/Action/ActionRepository";
+import { ConditionRepository } from "../../src/Condition/ConditionRepository";
 import DataBase from "../../src/Infra/DataBase";
 import { mock } from "jest-mock-extended";
 
@@ -15,6 +16,7 @@ describe("ActionRepository", () => {
         element: "element",
         qtd: 4,
         room_id: 1,
+        conditions: [],
       },
       {
         id: 2,
@@ -23,6 +25,7 @@ describe("ActionRepository", () => {
         element: "element 2 ",
         qtd: 8,
         room_id: 1,
+        conditions: [],
       },
     ];
 
@@ -31,6 +34,9 @@ describe("ActionRepository", () => {
 
     beforeEach(() => {
       databaseMock.query.mockClear();
+      repository.conditionRepository.getByActionId = jest
+        .fn()
+        .mockResolvedValue([]);
     });
     test("should getAll correctly", async () => {
       databaseMock.query.mockResolvedValue(actions);
@@ -57,6 +63,7 @@ describe("ActionRepository", () => {
         element: "element",
         qtd: 4,
         room_id: 1,
+        conditions: [],
       },
     ];
 
@@ -65,6 +72,9 @@ describe("ActionRepository", () => {
 
     beforeEach(() => {
       databaseMock.query.mockClear();
+      repository.conditionRepository.getByActionId = jest
+        .fn()
+        .mockResolvedValue([]);
     });
     test("should getById correctly", async () => {
       const id = 1;

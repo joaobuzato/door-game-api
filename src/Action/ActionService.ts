@@ -32,7 +32,6 @@ export class ActionService implements Service<Action> {
 
   validate = (action: Action) => {
     let valid = true;
-    console.log(Object.keys(action));
 
     if (!action.type || !["get", "use"].includes(action.type)) {
       valid = false;

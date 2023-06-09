@@ -14,31 +14,15 @@ describe("extendedTextRepository", () => {
     const bigText =
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     test.each([
-      { sentence: "", text: "", room_id: 0 },
-      { sentence: "valid", text: "", room_id: 0 },
-      { sentence: "valid", text: "valid", room_id: 0 },
-      { sentence: "", text: "valid", room_id: 1 },
-      { sentence: "", text: "", room_id: 1 },
-      {
-        sentence: bigSentence,
-        text: "",
-        room_id: 1,
-      },
-      {
-        sentence: bigSentence,
-        text: bigText,
-        room_id: 1,
-      },
-      {
-        sentence: bigSentence,
-        text: "valid",
-        room_id: 1,
-      },
-      {
-        sentence: "valid",
-        text: bigText,
-        room_id: 1,
-      },
+      { id: 0, sentence: "", text: "", room_id: 0 },
+      { id: 0, sentence: "valid", text: "", room_id: 0 },
+      { id: 0, sentence: "valid", text: "valid", room_id: 0 },
+      { id: 0, sentence: "", text: "valid", room_id: 1 },
+      { id: 0, sentence: "", text: "", room_id: 1 },
+      { id: 0, sentence: bigSentence, text: "", room_id: 1 },
+      { id: 0, sentence: bigSentence, text: bigText, room_id: 1 },
+      { id: 0, sentence: bigSentence, text: "valid", room_id: 1 },
+      { id: 0, sentence: "valid", text: bigText, room_id: 1 },
     ])("should return invalid if extendedText is not valid", (extendedText) => {
       const isValid = service.validate(extendedText);
       expect(isValid).toBe(false);

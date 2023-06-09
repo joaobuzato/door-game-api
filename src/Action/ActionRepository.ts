@@ -1,27 +1,30 @@
 import DataBase from "../Infra/DataBase";
 import { Repository } from "../Interfaces/Repository";
 import { Action } from "./Action";
+import { ConditionRepository } from "../Condition/ConditionRepository";
 export class ActionRepository implements Repository<Action> {
   dataBase: DataBase;
+  conditionRepository: ConditionRepository;
   constructor(dataBase: DataBase) {
     this.dataBase = dataBase;
+    this.conditionRepository = new ConditionRepository(dataBase);
   }
 
   async getAll() {
     const query = "SELECT * FROM actions";
-    const items: Action[] = [];
+
     const result: Action[] = await this.dataBase.query<Action>(query);
-    result.forEach((row: Action) => {
-      const action = this.mount(row);
-      items.push(action);
-    });
-    return items;
+    return Promise.all(
+      result.map((row: Action) => {
+        return this.mount(row);
+      })
+    );
   }
   async getById(id: number) {
     const query = `SELECT * FROM actions WHERE id = ?`;
     const result: Action[] = await this.dataBase.query<Action>(query, [id]);
     if (result.length > 0) {
-      return this.mount(result[0]);
+      return await this.mount(result[0]);
     }
     return null;
   }
@@ -51,8 +54,10 @@ export class ActionRepository implements Repository<Action> {
     await this.dataBase.query<Action>(query, [id]);
   }
 
-  mount(row: Action) {
-    return new Action(row, row.id);
+  async mount(row: Action) {
+    const action = new Action(row, row.id);
+    action.conditions = await this.conditionRepository.getByActionId(action.id);
+    return action;
   }
 }
 

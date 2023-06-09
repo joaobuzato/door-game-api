@@ -1,10 +1,13 @@
+import { Condition } from "../Condition/Condition";
+
 export class Action {
-  public readonly id?: number;
+  public readonly id: number;
   public type: string;
   public button_text: string;
   public element: string;
   public qtd: number;
   public room_id: number;
+  public conditions?: Condition[];
 
   constructor(props: Omit<Action, "id">, id?: number) {
     this.id = id ? id : 0; //uuid();
