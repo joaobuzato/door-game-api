@@ -101,8 +101,9 @@
 
 ### Repository
 
-- [ ] getAll()
+- [x] getAll()
 - [ ] getById(id)
+- [ ] getByActionId(action_id)
 - [ ] insert()
 - [ ] update(id)
 - [ ] delete(id)
