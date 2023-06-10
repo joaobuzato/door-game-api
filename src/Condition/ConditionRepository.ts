@@ -1,3 +1,4 @@
+import { Connection } from "mysql";
 import DataBase from "../Infra/DataBase";
 import { Repository } from "../Interfaces/Repository";
 import { Condition } from "./Condition";
@@ -9,13 +10,7 @@ export class ConditionRepository implements Repository<Condition> {
 
   async getAll() {
     const query = "SELECT * FROM conditions";
-    const items: Condition[] = [];
-    const result: Condition[] = await this.dataBase.query<Condition>(query);
-    result.forEach((row: Condition) => {
-      const condition = this.mount(row);
-      items.push(condition);
-    });
-    return items;
+    return await this.dataBase.query<Condition>(query);
   }
 
   async getByActionId(action_id: number) {
@@ -24,17 +19,35 @@ export class ConditionRepository implements Repository<Condition> {
   }
 
   async getById(id: number) {
-    console.log("getById");
-    return null;
+    const query = "SELECT * FROM conditions WHERE id = ?";
+    const result = await this.dataBase.query<Condition>(query, [id]);
+    return result.length > 0 ? result[0] : null;
   }
   async insert(condition: Condition) {
-    console.log("insert");
+    const query =
+      "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)";
+    await this.dataBase.query<Condition>(query, [
+      condition.element1,
+      condition.type,
+      condition.element2,
+      condition.action_id,
+      condition.id,
+    ]);
   }
   async update(condition: Condition) {
-    console.log("update");
+    const query =
+      "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?";
+    await this.dataBase.query<Condition>(query, [
+      condition.element1,
+      condition.type,
+      condition.element2,
+      condition.action_id,
+      condition.id,
+    ]);
   }
   async delete(id: number) {
-    console.log("delete");
+    const query = "DELETE FROM conditions WHERE id = ?";
+    await this.dataBase.query(query, [id]);
   }
 
   mount(condition: Condition) {

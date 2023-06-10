@@ -125,7 +125,6 @@ describe("extendedTextRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const id = 1;
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
 

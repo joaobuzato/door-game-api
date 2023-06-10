@@ -6,7 +6,7 @@ export class Condition {
   public action_id: number;
 
   constructor(props: Omit<Condition, "id">, id?: number) {
-    this.id = id ? id : 0; //uuid();
+    this.id = id || 0; //uuid();
     this.element1 = props.element1;
     this.element2 = props.element2;
     this.type = props.type;

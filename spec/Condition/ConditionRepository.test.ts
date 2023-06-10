@@ -91,4 +91,170 @@ describe("ConditionRepository", () => {
       );
     });
   });
+  describe("getById", () => {
+    const conditions = [
+      {
+        id: 1,
+        element1: "element1",
+        element2: "element2",
+        type: "type",
+        action_id: 1,
+      },
+    ];
+    const id = 1;
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should getById correctly", async () => {
+      databaseMock.query.mockResolvedValue(conditions);
+
+      const result = await repository.getById(id);
+
+      expect(result).toEqual(conditions[0]);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM conditions WHERE id = ?",
+        [id]
+      );
+    });
+    test("should throw if promise is rejected", async () => {
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
+      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM conditions WHERE id = ?",
+        [id]
+      );
+    });
+    test("should return null if there is no condition", async () => {
+      const id = 1;
+      databaseMock.query.mockResolvedValue([]);
+
+      const result = await repository.getById(id);
+
+      expect(result).toEqual(null);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM conditions WHERE id = ?",
+        [id]
+      );
+    });
+  });
+  describe("insert", () => {
+    const condition = new Condition({
+      element1: "element1",
+      element2: "element2",
+      type: "type",
+      action_id: 1,
+    });
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should insert correctly", async () => {
+      databaseMock.query.mockResolvedValue([]);
+
+      await repository.insert(condition);
+
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
+        [
+          condition.element1,
+          condition.type,
+          condition.element2,
+          condition.action_id,
+          condition.id,
+        ]
+      );
+    });
+
+    test("should throw if promise is rejected", async () => {
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
+      await expect(repository.insert(condition)).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
+        [
+          condition.element1,
+          condition.type,
+          condition.element2,
+          condition.action_id,
+          condition.id,
+        ]
+      );
+    });
+  });
+  describe("update", () => {
+    const condition = new Condition(
+      {
+        element1: "element1",
+        element2: "element2",
+        type: "type",
+        action_id: 1,
+      },
+      1
+    );
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should update correctly", async () => {
+      databaseMock.query.mockResolvedValue([]);
+
+      await repository.update(condition);
+
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?",
+        [
+          condition.element1,
+          condition.type,
+          condition.element2,
+          condition.action_id,
+          condition.id,
+        ]
+      );
+    });
+
+    test("should throw if promise is rejected", async () => {
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
+      await expect(repository.update(condition)).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?",
+        [
+          condition.element1,
+          condition.type,
+          condition.element2,
+          condition.action_id,
+          condition.id,
+        ]
+      );
+    });
+  });
+  describe("delete", () => {
+    const id = 1;
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+    });
+    test("should delete correctly", async () => {
+      databaseMock.query.mockResolvedValue([]);
+
+      await repository.delete(id);
+
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "DELETE FROM conditions WHERE id = ?",
+        [id]
+      );
+    });
+
+    test("should throw if promise is rejected", async () => {
+      const errorMessage = "Database query error";
+      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+
+      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "DELETE FROM conditions WHERE id = ?",
+        [id]
+      );
+    });
+  });
 });

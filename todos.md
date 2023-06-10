@@ -102,9 +102,8 @@
 ### Repository
 
 - [x] getAll()
-- [ ] getById(id)
-- [ ] getByActionId(action_id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
-- [ ] mount(object)
+- [x] getById(id)
+- [x] getByActionId(action_id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)

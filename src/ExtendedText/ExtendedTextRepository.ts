@@ -44,12 +44,12 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
       extendedText.sentence,
       extendedText.text,
       extendedText.room_id,
-      extendedText.id || 0,
+      extendedText.id,
     ]);
   }
   async delete(id: number) {
     const query = `DELETE FROM extended_texts WHERE id = ?`;
-    await await this.dataBase.query<ExtendedText>(query, [id]);
+    await this.dataBase.query<ExtendedText>(query, [id]);
   }
 
   mount(row: ExtendedText) {
