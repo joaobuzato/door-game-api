@@ -2,6 +2,8 @@ import { Router } from "express";
 import { extendedTextsRouter } from "./extendedTextRouter";
 import { actionsRouter } from "./actionRouter";
 import { conditionsRouter } from "./conditionRouter";
+import { roomsRouter } from "./roomRouter";
+import { doorsRouter } from "./doorRouter";
 
 export default class routes {
   app: any;
@@ -18,5 +20,7 @@ export default class routes {
     this.app.use(extendedTextsRouter);
     this.app.use(actionsRouter);
     this.app.use(conditionsRouter);
+    this.app.use(roomsRouter);
+    this.app.use(doorsRouter);
   }
 }

@@ -7,7 +7,7 @@ export class Room {
   public title: string;
   public text: string;
   public path: string;
-  public extendedTexts?: ExtendedText[];
+  public rooms?: ExtendedText[];
   public actions?: Action[];
   public doors?: Door[];
 

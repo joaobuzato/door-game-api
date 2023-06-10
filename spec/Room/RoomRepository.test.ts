@@ -15,7 +15,7 @@ describe("RoomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
       {
         id: 2,
@@ -24,7 +24,7 @@ describe("RoomRepository", () => {
         path: "paasdasdth",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
       {
         id: 3,
@@ -33,7 +33,7 @@ describe("RoomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
     ];
 
@@ -44,9 +44,7 @@ describe("RoomRepository", () => {
       databaseMock.query.mockClear();
       repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
-      repository.extendedTextRepository.getByRoomId = jest
-        .fn()
-        .mockResolvedValue([]);
+      repository.roomRepository.getByRoomId = jest.fn().mockResolvedValue([]);
     });
     test("should getAll correctly", async () => {
       databaseMock.query.mockResolvedValue(rooms);
@@ -73,7 +71,7 @@ describe("RoomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
     ];
 
@@ -84,9 +82,7 @@ describe("RoomRepository", () => {
       databaseMock.query.mockClear();
       repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
-      repository.extendedTextRepository.getByRoomId = jest
-        .fn()
-        .mockResolvedValue([]);
+      repository.roomRepository.getByRoomId = jest.fn().mockResolvedValue([]);
     });
     test("should getById correctly", async () => {
       const id = 1;
@@ -135,7 +131,7 @@ describe("RoomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
       1
     );
@@ -144,9 +140,7 @@ describe("RoomRepository", () => {
       databaseMock.query.mockClear();
       repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
-      repository.extendedTextRepository.getByRoomId = jest
-        .fn()
-        .mockResolvedValue([]);
+      repository.roomRepository.getByRoomId = jest.fn().mockResolvedValue([]);
     });
     test("should insert correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
@@ -178,7 +172,7 @@ describe("RoomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        extendedTexts: [],
+        rooms: [],
       },
       1
     );
@@ -210,7 +204,7 @@ describe("RoomRepository", () => {
           path: "path",
           actions: [],
           doors: [],
-          extendedTexts: [],
+          rooms: [],
         },
         1
       );
