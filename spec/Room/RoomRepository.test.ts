@@ -1,89 +1,102 @@
 import { describe, expect, test } from "@jest/globals";
-import { Action } from "../../src/Action/Action";
+import { Room } from "../../src/Room/Room";
 
-import { ActionRepository } from "../../src/Action/ActionRepository";
+import { RoomRepository } from "../../src/Room/RoomRepository";
 import DataBase from "../../src/Infra/DataBase";
 import { mock } from "jest-mock-extended";
 
-describe("ActionRepository", () => {
+describe("RoomRepository", () => {
   describe("getAll", () => {
-    const actions: Action[] = [
+    const rooms: Room[] = [
       {
         id: 1,
-        type: "typeTest",
-        button_text: "button_text",
-        element: "element",
-        qtd: 4,
-        room_id: 1,
-        conditions: [],
+        title: "title",
+        text: "text",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
       },
       {
         id: 2,
-        type: "typeTest",
-        button_text: "button_text",
-        element: "element 2 ",
-        qtd: 8,
-        room_id: 1,
-        conditions: [],
+        title: "title 45",
+        text: "texasdasdast",
+        path: "paasdasdth",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
+      },
+      {
+        id: 3,
+        title: "title 3",
+        text: "texasdasdt",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
       },
     ];
 
     const databaseMock = mock<DataBase>();
-    const repository = new ActionRepository(databaseMock);
+    const repository = new RoomRepository(databaseMock);
 
     beforeEach(() => {
       databaseMock.query.mockClear();
-      repository.conditionRepository.getByActionId = jest
+      repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.extendedTextRepository.getByRoomId = jest
         .fn()
         .mockResolvedValue([]);
     });
     test("should getAll correctly", async () => {
-      databaseMock.query.mockResolvedValue(actions);
+      databaseMock.query.mockResolvedValue(rooms);
 
       const result = await repository.getAll();
 
-      expect(result).toEqual(actions);
-      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM actions");
+      expect(result).toEqual(rooms);
+      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM rooms");
     });
     test("should throw if promise is rejected", async () => {
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
 
       await expect(repository.getAll()).rejects.toThrow(errorMessage);
-      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM actions");
+      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM rooms");
     });
   });
   describe("getById", () => {
-    const actions: Action[] = [
+    const rooms: Room[] = [
       {
-        id: 1,
-        type: "typeTest",
-        button_text: "button_text",
-        element: "element",
-        qtd: 4,
-        room_id: 1,
-        conditions: [],
+        id: 3,
+        title: "title 3",
+        text: "texasdasdt",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
       },
     ];
 
     const databaseMock = mock<DataBase>();
-    const repository = new ActionRepository(databaseMock);
+    const repository = new RoomRepository(databaseMock);
 
     beforeEach(() => {
       databaseMock.query.mockClear();
-      repository.conditionRepository.getByActionId = jest
+      repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.extendedTextRepository.getByRoomId = jest
         .fn()
         .mockResolvedValue([]);
     });
     test("should getById correctly", async () => {
       const id = 1;
-      databaseMock.query.mockResolvedValue(actions);
+      databaseMock.query.mockResolvedValue(rooms);
 
       const result = await repository.getById(id);
 
-      expect(result).toEqual(actions[0]);
+      expect(result).toEqual(rooms[0]);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "SELECT * FROM actions WHERE id = ?",
+        "SELECT * FROM rooms WHERE id = ?",
         [id]
       );
     });
@@ -94,11 +107,11 @@ describe("ActionRepository", () => {
 
       await expect(repository.getById(id)).rejects.toThrow(errorMessage);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "SELECT * FROM actions WHERE id = ?",
+        "SELECT * FROM rooms WHERE id = ?",
         [id]
       );
     });
-    test("should return null if there is no action", async () => {
+    test("should return null if there is no room", async () => {
       const id = 1;
       databaseMock.query.mockResolvedValue([]);
 
@@ -106,43 +119,43 @@ describe("ActionRepository", () => {
 
       expect(result).toEqual(null);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "SELECT * FROM actions WHERE id = ?",
+        "SELECT * FROM rooms WHERE id = ?",
         [id]
       );
     });
   });
   describe("insert", () => {
     const databaseMock = mock<DataBase>();
-    const repository = new ActionRepository(databaseMock);
+    const repository = new RoomRepository(databaseMock);
 
-    const action = new Action(
+    const room = new Room(
       {
-        type: "typeTest",
-        button_text: "button_text",
-        element: "element",
-        qtd: 4,
-        room_id: 1,
+        title: "title 3",
+        text: "texasdasdt",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
       },
       1
     );
 
     beforeEach(() => {
       databaseMock.query.mockClear();
+      repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.extendedTextRepository.getByRoomId = jest
+        .fn()
+        .mockResolvedValue([]);
     });
     test("should insert correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.insert(action);
+      await repository.insert(room);
 
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "INSERT INTO actions (type,button_text,element,qtd,room_id) VALUES (?,?,?,?,?)",
-        [
-          action.type,
-          action.button_text,
-          action.element,
-          action.qtd,
-          action.room_id,
-        ]
+        "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
+        [room.title, room.text, room.path]
       );
     });
 
@@ -150,33 +163,28 @@ describe("ActionRepository", () => {
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
 
-      await expect(repository.insert(action)).rejects.toThrow(errorMessage);
+      await expect(repository.insert(room)).rejects.toThrow(errorMessage);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "INSERT INTO actions (type,button_text,element,qtd,room_id) VALUES (?,?,?,?,?)",
-        [
-          action.type,
-          action.button_text,
-          action.element,
-          action.qtd,
-          action.room_id,
-        ]
+        "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
+        [room.title, room.text, room.path]
       );
     });
   });
   describe("update", () => {
-    const action = new Action(
+    const room = new Room(
       {
-        type: "typeTest",
-        button_text: "button_text",
-        element: "element",
-        qtd: 4,
-        room_id: 1,
+        title: "title 3",
+        text: "texasdasdt",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
       },
       1
     );
 
     const databaseMock = mock<DataBase>();
-    const repository = new ActionRepository(databaseMock);
+    const repository = new RoomRepository(databaseMock);
 
     beforeEach(() => {
       databaseMock.query.mockClear();
@@ -184,46 +192,33 @@ describe("ActionRepository", () => {
     test("should update correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.update(action);
+      await repository.update(room);
 
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "UPDATE actions SET type = ?, button_text = ?, element = ?, qtd = ?, room_id = ? WHERE id = ?",
-        [
-          action.type,
-          action.button_text,
-          action.element,
-          action.qtd,
-          action.room_id,
-          action.id,
-        ]
+        "UPDATE rooms SET title = ?, text = ?, path = ? WHERE id = ?",
+        [room.title, room.text, room.path, room.id]
       );
     });
 
     test("should throw if promise is rejected", async () => {
       const errorMessage = "Database query error";
       databaseMock.query.mockRejectedValue(new Error(errorMessage));
-      const action = new Action(
+      const room = new Room(
         {
-          type: "typeTest",
-          button_text: "button_text",
-          element: "element",
-          qtd: 4,
-          room_id: 1,
+          title: "title 3",
+          text: "texasdasdt",
+          path: "path",
+          actions: [],
+          doors: [],
+          extendedTexts: [],
         },
         1
       );
 
-      await expect(repository.update(action)).rejects.toThrow(errorMessage);
+      await expect(repository.update(room)).rejects.toThrow(errorMessage);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "UPDATE actions SET type = ?, button_text = ?, element = ?, qtd = ?, room_id = ? WHERE id = ?",
-        [
-          action.type,
-          action.button_text,
-          action.element,
-          action.qtd,
-          action.room_id,
-          action.id,
-        ]
+        "UPDATE rooms SET title = ?, text = ?, path = ? WHERE id = ?",
+        [room.title, room.text, room.path, room.id]
       );
     });
   });
@@ -231,7 +226,7 @@ describe("ActionRepository", () => {
     const id = 1;
 
     const databaseMock = mock<DataBase>();
-    const repository = new ActionRepository(databaseMock);
+    const repository = new RoomRepository(databaseMock);
 
     beforeEach(() => {
       databaseMock.query.mockClear();
@@ -242,7 +237,7 @@ describe("ActionRepository", () => {
       await repository.delete(id);
 
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "DELETE FROM actions WHERE id = ?",
+        "DELETE FROM rooms WHERE id = ?",
         [id]
       );
     });
@@ -253,7 +248,7 @@ describe("ActionRepository", () => {
 
       await expect(repository.delete(id)).rejects.toThrow(errorMessage);
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "DELETE FROM actions WHERE id = ?",
+        "DELETE FROM rooms WHERE id = ?",
         [id]
       );
     });

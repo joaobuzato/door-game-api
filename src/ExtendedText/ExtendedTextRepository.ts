@@ -30,6 +30,19 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
     }
     return null;
   }
+  async getByRoomId(room_id: number) {
+    const query = `SELECT * FROM extended_texts WHERE room_id = ?`;
+    const items: ExtendedText[] = [];
+    const result: ExtendedText[] = await this.dataBase.query<ExtendedText>(
+      query,
+      [room_id]
+    );
+    result.forEach((row: ExtendedText) => {
+      const ExtendedText = this.mount(row);
+      items.push(ExtendedText);
+    });
+    return items;
+  }
   async insert(extendedText: ExtendedText) {
     const query = `INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)`;
     await this.dataBase.query<ExtendedText>(query, [

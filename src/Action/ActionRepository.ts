@@ -28,6 +28,17 @@ export class ActionRepository implements Repository<Action> {
     }
     return null;
   }
+  async getByRoomId(room_id: number) {
+    const query = `SELECT * FROM actions WHERE room_id = ?`;
+    const result: Action[] = await this.dataBase.query<Action>(query, [
+      room_id,
+    ]);
+    return Promise.all(
+      result.map((row: Action) => {
+        return this.mount(row);
+      })
+    );
+  }
   async insert(action: Action) {
     const query = `INSERT INTO actions (type,button_text,element,qtd,room_id) VALUES (?,?,?,?,?)`;
     await this.dataBase.query<Action>(query, [
