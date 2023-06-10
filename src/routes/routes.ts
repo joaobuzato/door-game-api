@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { extendedTextsRouter } from "./extendedTextRouter";
 import { actionsRouter } from "./actionRouter";
+import { conditionsRouter } from "./conditionRouter";
 
 export default class routes {
   app: any;
@@ -16,5 +17,6 @@ export default class routes {
     this.app.use(this.router);
     this.app.use(extendedTextsRouter);
     this.app.use(actionsRouter);
+    this.app.use(conditionsRouter);
   }
 }

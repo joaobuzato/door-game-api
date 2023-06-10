@@ -76,19 +76,19 @@
 
 ### Routes
 
-- [ ] GET /conditions
-- [ ] GET /conditions/:id
-- [ ] POST /conditions
-- [ ] PUT /conditions/:id
-- [ ] DELETE /conditions/:id
+- [x] GET /conditions
+- [x] GET /conditions/:id
+- [x] POST /conditions
+- [x] PUT /conditions/:id
+- [x] DELETE /conditions/:id
 
 ### Controller
 
-- [ ] getAll()
-- [ ] getById(id)
-- [ ] insert()
-- [ ] update(id)
-- [ ] delete(id)
+- [x] getAll()
+- [x] getById(id)
+- [x] insert()
+- [x] update(id)
+- [x] delete(id)
 
 ### Service
 
