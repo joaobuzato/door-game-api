@@ -1,4 +1,5 @@
 import request from "supertest";
+import sinon from "sinon";
 import { app } from "../../src/app";
 import { ExtendedText } from "../../src/ExtendedText/ExtendedText";
 import ExtendedTextController from "../../src/ExtendedText/ExtendedTextController";

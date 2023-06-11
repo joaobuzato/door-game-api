@@ -4,6 +4,7 @@ import { actionsRouter } from "./actionRouter";
 import { conditionsRouter } from "./conditionRouter";
 import { roomsRouter } from "./roomRouter";
 import { doorsRouter } from "./doorRouter";
+import { authRouter } from "./authRouter";
 
 export default class routes {
   app: any;
@@ -17,6 +18,7 @@ export default class routes {
     });
 
     this.app.use(this.router);
+    this.app.use(authRouter);
     this.app.use(extendedTextsRouter);
     this.app.use(actionsRouter);
     this.app.use(conditionsRouter);
