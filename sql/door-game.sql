@@ -32,7 +32,7 @@ CREATE TABLE `actions` (
   PRIMARY KEY (`id`),
   KEY `actions_FK` (`room_id`),
   CONSTRAINT `actions_FK` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `actions` (
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
-INSERT INTO `actions` VALUES (1,'get','Pegar Faca','faca',1,1),(2,'get','Pegar Faca','faca',1,2);
+INSERT INTO `actions` VALUES (1,'get','Pegar Faca','faca',1,1),(2,'get','Pegar Faca','faca',1,2),(3,'get','button_text','faca',4,3),(4,'get','button_text','faca',4,3);
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +61,7 @@ CREATE TABLE `conditions` (
   PRIMARY KEY (`id`),
   KEY `conditions_FK` (`action_id`),
   CONSTRAINT `conditions_FK` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,6 +70,7 @@ CREATE TABLE `conditions` (
 
 LOCK TABLES `conditions` WRITE;
 /*!40000 ALTER TABLE `conditions` DISABLE KEYS */;
+INSERT INTO `conditions` VALUES (1,'element1','type','element2',1),(2,'faca','greater','1',1);
 /*!40000 ALTER TABLE `conditions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +151,7 @@ CREATE TABLE `rooms` (
 
 LOCK TABLES `rooms` WRITE;
 /*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
-INSERT INTO `rooms` VALUES (1,'test title','test text',''),(2,'second test title','second test text',''),(3,'third test title','third test text','');
+INSERT INTO `rooms` VALUES (1,'test title','test text','0000'),(2,'second test title','second test text','0001'),(3,'third test title','third test text','0002');
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -163,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-05 22:48:47
+-- Dump completed on 2023-06-12  8:16:59
