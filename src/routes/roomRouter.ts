@@ -9,12 +9,11 @@ const controller = new RoomController();
 roomsRouter.get("/rooms", async (request, response) => {
   try {
     const body = await controller.getAll();
-    response.json(body);
-    return response.status(200).send();
+    return response.status(200).json(body);
   } catch (e) {
     if (e instanceof Error) {
       log(e.message);
-      response.status(400).json({ message: "Erro ao obter rooms" }).send();
+      return response.status(400).json({ message: "Erro ao obter rooms" });
     }
   }
 });
@@ -27,20 +26,14 @@ roomsRouter.get(
       const { id } = request.params;
       const body = await controller.getById(Number(id));
       if (!body) {
-        return response
-          .status(404)
-          .json({ message: "room não encontrado" })
-          .send();
+        return response.status(404).json({ message: "room não encontrado" });
       }
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao obter room" })
-          .send();
+        return response.status(400).json({ message: "Erro ao obter room" });
       }
     }
   }
@@ -53,14 +46,11 @@ roomsRouter.post(
     try {
       const room = new Room(request.body);
       await controller.insert(room);
-      return response.status(201).json({ message: "Inserido!" }).send();
+      return response.status(201).json({ message: "Inserido!" });
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao salvar room" })
-          .send();
+        return response.status(400).json({ message: "Erro ao salvar room" });
       }
     }
   }
@@ -78,10 +68,7 @@ roomsRouter.put(
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao atualizar room" })
-          .send();
+        return response.status(400).json({ message: "Erro ao atualizar room" });
       }
     }
   }
@@ -94,14 +81,11 @@ roomsRouter.delete(
       const { id } = request.params;
       await controller.delete(Number(id));
       response.json({ message: "Deletado!!" });
-      return response.status(204).send();
+      return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao deletar room" })
-          .send();
+        return response.status(400).json({ message: "Erro ao deletar room" });
       }
     }
   }

@@ -13,14 +13,11 @@ extendedTextsRouter.get(
     try {
       const body = await controller.getAll();
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        response
-          .status(400)
-          .json({ message: "Erro ao obter extendedTexts" })
-          .send();
+        response.status(400).json({ message: "Erro ao obter extendedTexts" });
       }
     }
   }
@@ -36,18 +33,16 @@ extendedTextsRouter.get(
       if (!body) {
         return response
           .status(404)
-          .json({ message: "extendedText não encontrado" })
-          .send();
+          .json({ message: "extendedText não encontrado" });
       }
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao obter extendedText" })
-          .send();
+          .json({ message: "Erro ao obter extendedText" });
       }
     }
   }
@@ -60,14 +55,13 @@ extendedTextsRouter.post(
     try {
       const extendedText = new ExtendedText(request.body);
       await controller.insert(extendedText);
-      return response.status(201).json({ message: "Inserido!" }).send();
+      return response.status(201).json({ message: "Inserido!" });
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao salvar extendedText" })
-          .send();
+          .json({ message: "Erro ao salvar extendedText" });
       }
     }
   }
@@ -87,8 +81,7 @@ extendedTextsRouter.put(
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar extendedText" })
-          .send();
+          .json({ message: "Erro ao atualizar extendedText" });
       }
     }
   }
@@ -101,14 +94,13 @@ extendedTextsRouter.delete(
       const { id } = request.params;
       await controller.delete(Number(id));
       response.json({ message: "Deletado!!" });
-      return response.status(204).send();
+      return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao deletar extendedText" })
-          .send();
+          .json({ message: "Erro ao deletar extendedText" });
       }
     }
   }

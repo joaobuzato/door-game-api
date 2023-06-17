@@ -13,11 +13,11 @@ actionsRouter.get(
     try {
       const body = await controller.getAll();
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        response.status(400).json({ message: "Erro ao obter actions" }).send();
+        response.status(400).json({ message: "Erro ao obter actions" });
       }
     }
   }
@@ -31,20 +31,14 @@ actionsRouter.get(
       const { id } = request.params;
       const body = await controller.getById(Number(id));
       if (!body) {
-        return response
-          .status(404)
-          .json({ message: "action não encontrado" })
-          .send();
+        return response.status(404).json({ message: "action não encontrado" });
       }
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao obter action" })
-          .send();
+        return response.status(400).json({ message: "Erro ao obter action" });
       }
     }
   }
@@ -81,8 +75,7 @@ actionsRouter.put(
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar action" })
-          .send();
+          .json({ message: "Erro ao atualizar action" });
       }
     }
   }
@@ -95,14 +88,11 @@ actionsRouter.delete(
       const { id } = request.params;
       await controller.delete(Number(id));
       response.json({ message: "Deletado!!" });
-      return response.status(204).send();
+      return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        return response
-          .status(400)
-          .json({ message: "Erro ao deletar action" })
-          .send();
+        return response.status(400).json({ message: "Erro ao deletar action" });
       }
     }
   }

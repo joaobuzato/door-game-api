@@ -13,14 +13,11 @@ conditionsRouter.get(
     try {
       const body = await controller.getAll();
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
-        response
-          .status(400)
-          .json({ message: "Erro ao obter conditions" })
-          .send();
+        response.status(400).json({ message: "Erro ao obter conditions" });
       }
     }
   }
@@ -36,18 +33,16 @@ conditionsRouter.get(
       if (!body) {
         return response
           .status(404)
-          .json({ message: "condition não encontrado" })
-          .send();
+          .json({ message: "condition não encontrado" });
       }
       response.json(body);
-      return response.status(200).send();
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao obter condition" })
-          .send();
+          .json({ message: "Erro ao obter condition" });
       }
     }
   }
@@ -84,8 +79,7 @@ conditionsRouter.put(
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar condition" })
-          .send();
+          .json({ message: "Erro ao atualizar condition" });
       }
     }
   }
@@ -98,14 +92,13 @@ conditionsRouter.delete(
       const { id } = request.params;
       await controller.delete(Number(id));
       response.json({ message: "Deletado!!" });
-      return response.status(204).send();
+      return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
         log(e.message);
         return response
           .status(400)
-          .json({ message: "Erro ao deletar condition" })
-          .send();
+          .json({ message: "Erro ao deletar condition" });
       }
     }
   }
