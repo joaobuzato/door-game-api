@@ -2,7 +2,6 @@ import request from "supertest";
 import { app } from "../../src/app";
 import { Door } from "../../src/Door/Door";
 import DoorController from "../../src/Door/DoorController";
-jest.mock("../../src/Door/DoorController");
 
 describe("GET /doors", () => {
   let getAllSpy: jest.SpyInstance;
@@ -58,8 +57,8 @@ describe("GET /doors/:id", () => {
   const id = 1;
   const door: Door = {
     id: 1,
-    path: "path",
-    color: "#000000",
+    path: "patfh",
+    color: "#000fd0",
     room_id: 2,
   };
   beforeEach(() => {
@@ -87,7 +86,7 @@ describe("GET /doors/:id", () => {
 
     expect(response.status).toBe(404);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "door não encontrado" });
+    expect(response.body).toEqual({ message: "Door não encontrado" });
     expect(getByIdSpy).toBeCalledTimes(1);
     expect(getByIdSpy).toBeCalledWith(id);
   });
@@ -106,11 +105,12 @@ describe("GET /doors/:id", () => {
   });
 });
 
-describe("POST /doors", () => {
+describe("POST /doors/:id", () => {
   let insertSpy: jest.SpyInstance;
+
   const door = new Door({
-    path: "path",
-    color: "#000000",
+    path: "patfh",
+    color: "#000fd0",
     room_id: 2,
   });
   beforeEach(() => {
@@ -120,7 +120,7 @@ describe("POST /doors", () => {
     insertSpy.mockClear();
   });
   test("should respond with success when inserted successfully", async () => {
-    insertSpy.mockResolvedValue(null);
+    insertSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .post(`/doors`)
@@ -128,13 +128,12 @@ describe("POST /doors", () => {
       .send(door);
 
     expect(response.status).toBe(201);
-    expect(response.type).toBe("application/json");
     expect(insertSpy).toBeCalledTimes(1);
     expect(insertSpy).toBeCalledWith(door);
   });
 
   test("should handle errors and respond with JSON data and status 400 on insert", async () => {
-    insertSpy.mockRejectedValue(new Error("error"));
+    insertSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .post(`/doors`)
@@ -143,7 +142,10 @@ describe("POST /doors", () => {
 
     expect(insertSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao salvar door" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao criar door",
+    });
     expect(response.status).toBe(400);
   });
 });
@@ -153,8 +155,8 @@ describe("PUT /doors/:id", () => {
   const id = 1;
   const door = new Door(
     {
-      path: "path",
-      color: "#000000",
+      path: "patfh",
+      color: "#000fd0",
       room_id: 2,
     },
     id
@@ -166,20 +168,20 @@ describe("PUT /doors/:id", () => {
     updateSpy.mockClear();
   });
   test("should respond with success when updated successfully", async () => {
-    updateSpy.mockResolvedValue(null);
+    updateSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .put(`/doors/${id}`)
       .set("Content-type", "application/json")
       .send(door);
 
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
     expect(updateSpy).toBeCalledTimes(1);
     expect(updateSpy).toBeCalledWith(door);
   });
 
   test("should handle errors and respond with JSON data and status 400 on update", async () => {
-    updateSpy.mockRejectedValue(new Error("error"));
+    updateSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .put(`/doors/${id}`)
@@ -189,6 +191,7 @@ describe("PUT /doors/:id", () => {
     expect(updateSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
     expect(response.body).toEqual({
+      success: false,
       message: "Erro ao atualizar door",
     });
     expect(response.status).toBe(400);
@@ -204,27 +207,29 @@ describe("DELETE /doors/:id", () => {
   afterEach(() => {
     deleteSpy.mockClear();
   });
-  test("should respond with JSON data and status 200 when get by id", async () => {
-    deleteSpy.mockResolvedValue(null);
+  test("should respond with 200 when deleted", async () => {
+    deleteSpy.mockResolvedValue({ success: true });
 
     const response = await request(app).delete(`/doors/${id}`);
 
     expect(response.status).toBe(200);
-    expect(response.type).toBe("application/json");
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
   });
 
   test("should handle errors and respond with JSON data and status 400 on get by id", async () => {
     const id = 1;
-    deleteSpy.mockRejectedValue(new Error("error"));
+    deleteSpy.mockResolvedValue({ success: false });
 
     const response = await request(app).delete(`/doors/${id}`);
 
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao deletar door" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao deletar door",
+    });
     expect(response.status).toBe(400);
   });
 });

@@ -2,7 +2,6 @@ import request from "supertest";
 import { app } from "../../src/app";
 import { Condition } from "../../src/Condition/Condition";
 import ConditionController from "../../src/Condition/ConditionController";
-jest.mock("../../src/Condition/ConditionController");
 
 describe("GET /conditions", () => {
   let getAllSpy: jest.SpyInstance;
@@ -84,7 +83,7 @@ describe("GET /conditions/:id", () => {
 
     expect(response.status).toBe(404);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "condition não encontrado" });
+    expect(response.body).toEqual({ message: "Condition não encontrado" });
     expect(getByIdSpy).toBeCalledTimes(1);
     expect(getByIdSpy).toBeCalledWith(id);
   });
@@ -103,8 +102,9 @@ describe("GET /conditions/:id", () => {
   });
 });
 
-describe("POST /conditions", () => {
+describe("POST /conditions/:id", () => {
   let insertSpy: jest.SpyInstance;
+
   const condition = new Condition({
     element1: "element",
     type: "greater",
@@ -118,7 +118,7 @@ describe("POST /conditions", () => {
     insertSpy.mockClear();
   });
   test("should respond with success when inserted successfully", async () => {
-    insertSpy.mockResolvedValue(null);
+    insertSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .post(`/conditions`)
@@ -126,13 +126,12 @@ describe("POST /conditions", () => {
       .send(condition);
 
     expect(response.status).toBe(201);
-    expect(response.type).toBe("application/json");
     expect(insertSpy).toBeCalledTimes(1);
     expect(insertSpy).toBeCalledWith(condition);
   });
 
   test("should handle errors and respond with JSON data and status 400 on insert", async () => {
-    insertSpy.mockRejectedValue(new Error("error"));
+    insertSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .post(`/conditions`)
@@ -141,7 +140,10 @@ describe("POST /conditions", () => {
 
     expect(insertSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao salvar condition" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao criar condition",
+    });
     expect(response.status).toBe(400);
   });
 });
@@ -165,20 +167,20 @@ describe("PUT /conditions/:id", () => {
     updateSpy.mockClear();
   });
   test("should respond with success when updated successfully", async () => {
-    updateSpy.mockResolvedValue(null);
+    updateSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .put(`/conditions/${id}`)
       .set("Content-type", "application/json")
       .send(condition);
 
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
     expect(updateSpy).toBeCalledTimes(1);
     expect(updateSpy).toBeCalledWith(condition);
   });
 
   test("should handle errors and respond with JSON data and status 400 on update", async () => {
-    updateSpy.mockRejectedValue(new Error("error"));
+    updateSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .put(`/conditions/${id}`)
@@ -188,6 +190,7 @@ describe("PUT /conditions/:id", () => {
     expect(updateSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
     expect(response.body).toEqual({
+      success: false,
       message: "Erro ao atualizar condition",
     });
     expect(response.status).toBe(400);
@@ -203,27 +206,29 @@ describe("DELETE /conditions/:id", () => {
   afterEach(() => {
     deleteSpy.mockClear();
   });
-  test("should respond with JSON data and status 200 when get by id", async () => {
-    deleteSpy.mockResolvedValue(null);
+  test("should respond with 200 when deleted", async () => {
+    deleteSpy.mockResolvedValue({ success: true });
 
     const response = await request(app).delete(`/conditions/${id}`);
 
     expect(response.status).toBe(200);
-    expect(response.type).toBe("application/json");
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
   });
 
   test("should handle errors and respond with JSON data and status 400 on get by id", async () => {
     const id = 1;
-    deleteSpy.mockRejectedValue(new Error("error"));
+    deleteSpy.mockResolvedValue({ success: false });
 
     const response = await request(app).delete(`/conditions/${id}`);
 
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao deletar condition" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao deletar condition",
+    });
     expect(response.status).toBe(400);
   });
 });

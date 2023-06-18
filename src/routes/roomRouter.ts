@@ -39,23 +39,24 @@ roomsRouter.post(
   "/rooms",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    const room = new Room(request.body);
+    const { id } = request.params;
+    const room = new Room(request.body, Number(id));
     controller
-      .update(room)
+      .insert(room)
       .then((result) => {
         if (result.success)
           return response
             .status(201)
-            .json({ success: true, message: "Criado" });
+            .json({ success: true, message: "Inserido" });
         return response
           .status(400)
-          .json({ success: false, message: "Erro ao criar room" });
+          .json({ success: false, message: "Erro ao inserir room" });
       })
       .catch((e) => {
         console.log(e);
         return response
           .status(400)
-          .json({ success: false, message: "Erro ao criar room" });
+          .json({ success: false, message: "Erro ao inserir room" });
       });
   }
 );

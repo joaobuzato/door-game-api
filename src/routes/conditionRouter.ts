@@ -52,7 +52,7 @@ conditionsRouter.post(
   async (request, response) => {
     const condition = new Condition(request.body);
     controller
-      .update(condition)
+      .insert(condition)
       .then((result) => {
         if (result.success)
           return response

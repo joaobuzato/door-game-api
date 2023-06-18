@@ -47,7 +47,7 @@ actionsRouter.post(
   async (request, response) => {
     const action = new Action(request.body);
     controller
-      .update(action)
+      .insert(action)
       .then((result) => {
         if (result.success)
           return response

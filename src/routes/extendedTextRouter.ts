@@ -51,7 +51,7 @@ extendedTextsRouter.post(
   async (request, response) => {
     const extendedText = new ExtendedText(request.body);
     controller
-      .update(extendedText)
+      .insert(extendedText)
       .then((result) => {
         if (result.success)
           return response

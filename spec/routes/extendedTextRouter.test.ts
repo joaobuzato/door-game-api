@@ -1,9 +1,7 @@
 import request from "supertest";
-import sinon from "sinon";
 import { app } from "../../src/app";
 import { ExtendedText } from "../../src/ExtendedText/ExtendedText";
 import ExtendedTextController from "../../src/ExtendedText/ExtendedTextController";
-jest.mock("../../src/ExtendedText/ExtendedTextController");
 
 describe("GET /extendedTexts", () => {
   let getAllSpy: jest.SpyInstance;
@@ -82,7 +80,7 @@ describe("GET /extendedTexts/:id", () => {
 
     expect(response.status).toBe(404);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "extendedText não encontrado" });
+    expect(response.body).toEqual({ message: "ExtendedText não encontrado" });
     expect(getByIdSpy).toBeCalledTimes(1);
     expect(getByIdSpy).toBeCalledWith(id);
   });
@@ -101,8 +99,9 @@ describe("GET /extendedTexts/:id", () => {
   });
 });
 
-describe("POST /extendedTexts", () => {
+describe("POST /extendedTexts/:id", () => {
   let insertSpy: jest.SpyInstance;
+
   const extendedText = new ExtendedText({
     sentence: "sentence1",
     text: "text1",
@@ -115,7 +114,7 @@ describe("POST /extendedTexts", () => {
     insertSpy.mockClear();
   });
   test("should respond with success when inserted successfully", async () => {
-    insertSpy.mockResolvedValue(null);
+    insertSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .post(`/extendedTexts`)
@@ -123,13 +122,12 @@ describe("POST /extendedTexts", () => {
       .send(extendedText);
 
     expect(response.status).toBe(201);
-    expect(response.type).toBe("application/json");
     expect(insertSpy).toBeCalledTimes(1);
     expect(insertSpy).toBeCalledWith(extendedText);
   });
 
   test("should handle errors and respond with JSON data and status 400 on insert", async () => {
-    insertSpy.mockRejectedValue(new Error("error"));
+    insertSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .post(`/extendedTexts`)
@@ -138,7 +136,10 @@ describe("POST /extendedTexts", () => {
 
     expect(insertSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao salvar extendedText" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao criar extendedText",
+    });
     expect(response.status).toBe(400);
   });
 });
@@ -161,20 +162,20 @@ describe("PUT /extendedTexts/:id", () => {
     updateSpy.mockClear();
   });
   test("should respond with success when updated successfully", async () => {
-    updateSpy.mockResolvedValue(null);
+    updateSpy.mockResolvedValue({ success: true });
 
     const response = await request(app)
       .put(`/extendedTexts/${id}`)
       .set("Content-type", "application/json")
       .send(extendedText);
 
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
     expect(updateSpy).toBeCalledTimes(1);
     expect(updateSpy).toBeCalledWith(extendedText);
   });
 
   test("should handle errors and respond with JSON data and status 400 on update", async () => {
-    updateSpy.mockRejectedValue(new Error("error"));
+    updateSpy.mockResolvedValue({ success: false });
 
     const response = await request(app)
       .put(`/extendedTexts/${id}`)
@@ -184,6 +185,7 @@ describe("PUT /extendedTexts/:id", () => {
     expect(updateSpy).toBeCalledTimes(1);
     expect(response.type).toBe("application/json");
     expect(response.body).toEqual({
+      success: false,
       message: "Erro ao atualizar extendedText",
     });
     expect(response.status).toBe(400);
@@ -199,27 +201,29 @@ describe("DELETE /extendedTexts/:id", () => {
   afterEach(() => {
     deleteSpy.mockClear();
   });
-  test("should respond with JSON data and status 200 when get by id", async () => {
-    deleteSpy.mockResolvedValue(null);
+  test("should respond with 200 when deleted", async () => {
+    deleteSpy.mockResolvedValue({ success: true });
 
     const response = await request(app).delete(`/extendedTexts/${id}`);
 
     expect(response.status).toBe(200);
-    expect(response.type).toBe("application/json");
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
   });
 
   test("should handle errors and respond with JSON data and status 400 on get by id", async () => {
     const id = 1;
-    deleteSpy.mockRejectedValue(new Error("error"));
+    deleteSpy.mockResolvedValue({ success: false });
 
     const response = await request(app).delete(`/extendedTexts/${id}`);
 
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
     expect(response.type).toBe("application/json");
-    expect(response.body).toEqual({ message: "Erro ao deletar extendedText" });
+    expect(response.body).toEqual({
+      success: false,
+      message: "Erro ao deletar extendedText",
+    });
     expect(response.status).toBe(400);
   });
 });

@@ -29,7 +29,7 @@ doorsRouter.get(
       const { id } = request.params;
       const body = await controller.getById(Number(id));
       if (!body) {
-        return response.status(404).json({ message: "door não encontrado" });
+        return response.status(404).json({ message: "Door não encontrado" });
       }
       response.json(body);
       return response.status(200);
@@ -66,7 +66,7 @@ doorsRouter.post(
   async (request, response) => {
     const door = new Door(request.body);
     controller
-      .update(door)
+      .insert(door)
       .then((result) => {
         if (result.success)
           return response
