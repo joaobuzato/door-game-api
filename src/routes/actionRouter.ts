@@ -29,7 +29,7 @@ actionsRouter.get(
       const { id } = request.params;
       const body = await controller.getById(Number(id));
       if (!body) {
-        return response.status(404).json({ message: "action não encontrado" });
+        return response.status(404).json({ message: "Action não encontrado" });
       }
       response.json(body);
       return response.status(200);
@@ -45,15 +45,24 @@ actionsRouter.post(
   "/actions",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const action = new Action(request.body);
-      await controller.insert(action);
-      response.status(201).json({ message: "Inserido!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        response.status(400).json({ message: "Erro ao salvar action" });
-      }
-    }
+    const action = new Action(request.body);
+    controller
+      .update(action)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(201)
+            .json({ success: true, message: "Criado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar action" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar action" });
+      });
   }
 );
 
@@ -61,34 +70,49 @@ actionsRouter.put(
   "/actions/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      const action = new Action(request.body, Number(id));
-      await controller.update(action);
-      return response.status(204).send({ message: "Atualizado!!" });
-    } catch (e) {
-      if (e instanceof Error) {
+    const { id } = request.params;
+    const action = new Action(request.body, Number(id));
+    controller
+      .update(action)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Atualizado" });
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar action" });
-      }
-    }
+          .json({ success: false, message: "Erro ao atualizar action" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar action" });
+      });
   }
 );
 actionsRouter.delete(
   "/actions/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      await controller.delete(Number(id));
-      response.json({ message: "Deletado!!" });
-      return response.status(204);
-    } catch (e) {
-      if (e instanceof Error) {
-        return response.status(400).json({ message: "Erro ao deletar action" });
-      }
-    }
+    const { id } = request.params;
+    controller
+      .delete(Number(id))
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Deletado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar action" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar action" });
+      });
   }
 );
 

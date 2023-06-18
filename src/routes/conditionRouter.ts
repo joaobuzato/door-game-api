@@ -32,7 +32,7 @@ conditionsRouter.get(
       if (!body) {
         return response
           .status(404)
-          .json({ message: "condition não encontrado" });
+          .json({ message: "Condition não encontrado" });
       }
       response.json(body);
       return response.status(200);
@@ -50,15 +50,24 @@ conditionsRouter.post(
   "/conditions",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const condition = new Condition(request.body);
-      await controller.insert(condition);
-      response.status(201).json({ message: "Inserido!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        response.status(400).json({ message: "Erro ao salvar condition" });
-      }
-    }
+    const condition = new Condition(request.body);
+    controller
+      .update(condition)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(201)
+            .json({ success: true, message: "Criado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar condition" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar condition" });
+      });
   }
 );
 
@@ -66,36 +75,49 @@ conditionsRouter.put(
   "/conditions/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      const condition = new Condition(request.body, Number(id));
-      await controller.update(condition);
-      return response.status(204).send({ message: "Atualizado!!" });
-    } catch (e) {
-      if (e instanceof Error) {
+    const { id } = request.params;
+    const condition = new Condition(request.body, Number(id));
+    controller
+      .update(condition)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Atualizado" });
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar condition" });
-      }
-    }
+          .json({ success: false, message: "Erro ao atualizar condition" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar condition" });
+      });
   }
 );
 conditionsRouter.delete(
   "/conditions/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      await controller.delete(Number(id));
-      response.json({ message: "Deletado!!" });
-      return response.status(204);
-    } catch (e) {
-      if (e instanceof Error) {
+    const { id } = request.params;
+    controller
+      .delete(Number(id))
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Deletado" });
         return response
           .status(400)
-          .json({ message: "Erro ao deletar condition" });
-      }
-    }
+          .json({ success: false, message: "Erro ao deletar condition" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar condition" });
+      });
   }
 );
 
