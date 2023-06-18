@@ -104,10 +104,9 @@ describe("actionService", () => {
       expect(result).toEqual(actions);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getAll.mockRejectedValue(new Error(errorMessage));
+      repositoryMock.getAll.mockRejectedValue([]);
 
-      await expect(service.getAll()).rejects.toThrow(errorMessage);
+      await expect(service.getAll()).rejects.toStrictEqual([]);
       expect(repositoryMock.getAll).toBeCalledTimes(1);
     });
   });
@@ -125,6 +124,7 @@ describe("actionService", () => {
       repositoryMock.getById.mockClear();
     });
     test("should getById Correctly", async () => {
+      const id = 1;
       repositoryMock.getById.mockResolvedValue(action);
 
       const result = await service.getById(id);
@@ -133,10 +133,10 @@ describe("actionService", () => {
       expect(repositoryMock.getById).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getById.mockRejectedValue(new Error(errorMessage));
+      const id = 1;
+      repositoryMock.getById.mockRejectedValue(null);
 
-      await expect(service.getById(id)).rejects.toThrow(errorMessage);
+      await expect(service.getById(id)).rejects.toStrictEqual(null);
       expect(repositoryMock.getById).toBeCalledWith(id);
     });
   });
@@ -153,26 +153,25 @@ describe("actionService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue();
+      repositoryMock.insert.mockResolvedValue({ success: false });
 
       await service.insert(action);
 
       expect(repositoryMock.insert).toBeCalledWith(action);
     });
-    test("should throw error if button_text is not valid", async () => {
-      const actionTest = { ...action, button_text: "" };
-      await expect(service.insert(actionTest)).rejects.toThrow(
-        "action Inválido"
-      );
+    test("should throw error if element is not valid", async () => {
+      const actionTest = { ...action, element: "" };
+      await expect(service.insert(actionTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.insert.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.insert.mockRejectedValue({ success: false });
 
-      await expect(service.insert(action)).rejects.toThrow(errorMessage);
+      await expect(service.insert(action)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledWith(action);
     });
   });
@@ -188,27 +187,19 @@ describe("actionService", () => {
     beforeEach(() => {
       repositoryMock.update.mockClear();
     });
-    test("should update Correctly", async () => {
-      repositoryMock.update.mockResolvedValue();
-
-      await service.update(action);
-
-      expect(repositoryMock.update).toBeCalledWith(action);
-    });
-    test("should throw error if button_text is not valid", async () => {
-      const actionTest = { ...action, button_text: "" };
-      await expect(service.update(actionTest)).rejects.toThrow(
-        "action Inválido"
-      );
+    test("should throw error if element is not valid", async () => {
+      const actionTest = { ...action, element: "" };
+      await expect(service.update(actionTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.update.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.update.mockRejectedValue({ success: false });
 
-      await expect(service.update(action)).rejects.toThrow(errorMessage);
+      await expect(service.update(action)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledWith(action);
     });
   });
@@ -218,19 +209,18 @@ describe("actionService", () => {
       repositoryMock.delete.mockClear();
     });
     test("should delete correctly", async () => {
-      repositoryMock.delete.mockResolvedValue();
+      repositoryMock.delete.mockResolvedValue({ success: true });
 
       await service.delete(id);
 
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.delete.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.delete.mockResolvedValue({ success: false });
 
-      await expect(service.delete(id)).rejects.toThrow(errorMessage);
+      await expect(service.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
   });

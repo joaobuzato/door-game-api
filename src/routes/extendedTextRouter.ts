@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { ExtendedText } from "../ExtendedText/ExtendedText";
-import { log } from "../Logger";
 import ExtendedTextController from "../ExtendedText/ExtendedTextController";
 const extendedTextsRouter = Router();
 const controller = new ExtendedTextController();
@@ -16,7 +15,6 @@ extendedTextsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao obter extendedTexts" });
       }
     }
@@ -33,13 +31,12 @@ extendedTextsRouter.get(
       if (!body) {
         return response
           .status(404)
-          .json({ message: "extendedText não encontrado" });
+          .json({ message: "ExtendedText não encontrado" });
       }
       response.json(body);
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response
           .status(400)
           .json({ message: "Erro ao obter extendedText" });
@@ -52,18 +49,24 @@ extendedTextsRouter.post(
   "/extendedTexts",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const extendedText = new ExtendedText(request.body);
-      await controller.insert(extendedText);
-      return response.status(201).json({ message: "Inserido!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
+    const extendedText = new ExtendedText(request.body);
+    controller
+      .update(extendedText)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(201)
+            .json({ success: true, message: "Criado" });
         return response
           .status(400)
-          .json({ message: "Erro ao salvar extendedText" });
-      }
-    }
+          .json({ success: false, message: "Erro ao criar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar extendedText" });
+      });
   }
 );
 
@@ -71,39 +74,49 @@ extendedTextsRouter.put(
   "/extendedTexts/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      const extendedText = new ExtendedText(request.body, Number(id));
-      await controller.update(extendedText);
-      return response.status(204).send({ message: "Atualizado!!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
+    const { id } = request.params;
+    const extendedText = new ExtendedText(request.body, Number(id));
+    controller
+      .update(extendedText)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Atualizado" });
         return response
           .status(400)
-          .json({ message: "Erro ao atualizar extendedText" });
-      }
-    }
+          .json({ success: false, message: "Erro ao atualizar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar extendedText" });
+      });
   }
 );
 extendedTextsRouter.delete(
   "/extendedTexts/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      await controller.delete(Number(id));
-      response.json({ message: "Deletado!!" });
-      return response.status(204);
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
+    const { id } = request.params;
+    controller
+      .delete(Number(id))
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Deletado" });
         return response
           .status(400)
-          .json({ message: "Erro ao deletar extendedText" });
-      }
-    }
+          .json({ success: false, message: "Erro ao deletar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar extendedText" });
+      });
   }
 );
-
 export { extendedTextsRouter };

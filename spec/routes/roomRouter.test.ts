@@ -213,13 +213,12 @@ describe("DELETE /rooms/:id", () => {
   afterEach(() => {
     deleteSpy.mockClear();
   });
-  test("should respond with JSON data and status 200 when get by id", async () => {
+  test("should respond with 204 when deleted", async () => {
     deleteSpy.mockResolvedValue(null);
 
     const response = await request(app).delete(`/rooms/${id}`);
 
-    expect(response.status).toBe(200);
-    expect(response.type).toBe("application/json");
+    expect(response.status).toBe(204);
     expect(deleteSpy).toBeCalledTimes(1);
     expect(deleteSpy).toBeCalledWith(id);
   });

@@ -5,7 +5,7 @@ export interface Service<T> {
   repository: Repository<T>;
   getAll: () => Promise<Array<T>>;
   getById: (id: number) => Promise<T | null>;
-  insert: (obj: T) => Promise<void>;
-  update: (obj: T) => Promise<void>;
-  delete: (id: number) => Promise<void>;
+  insert: (obj: T) => Promise<{ success: boolean }>;
+  update: (obj: T) => Promise<{ success: boolean }>;
+  delete: (id: number) => Promise<{ success: boolean }>;
 }

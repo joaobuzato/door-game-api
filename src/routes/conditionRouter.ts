@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Condition } from "../Condition/Condition";
-import { log } from "../Logger";
+
 import ConditionController from "../Condition/ConditionController";
 import { authenticateToken, emptyAuthMiddleware } from "./authRouter";
 const conditionsRouter = Router();
@@ -16,7 +16,6 @@ conditionsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao obter conditions" });
       }
     }
@@ -39,7 +38,6 @@ conditionsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response
           .status(400)
           .json({ message: "Erro ao obter condition" });
@@ -58,7 +56,6 @@ conditionsRouter.post(
       response.status(201).json({ message: "Inserido!" });
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao salvar condition" });
       }
     }
@@ -76,7 +73,6 @@ conditionsRouter.put(
       return response.status(204).send({ message: "Atualizado!!" });
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response
           .status(400)
           .json({ message: "Erro ao atualizar condition" });
@@ -95,7 +91,6 @@ conditionsRouter.delete(
       return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response
           .status(400)
           .json({ message: "Erro ao deletar condition" });

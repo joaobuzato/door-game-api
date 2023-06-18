@@ -30,8 +30,6 @@ CREATE TABLE `actions` (
   `qtd` int NOT NULL DEFAULT '0',
   `room_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `actions_FK` (`room_id`),
-  CONSTRAINT `actions_FK` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,8 +57,6 @@ CREATE TABLE `conditions` (
   `element2` varchar(100) NOT NULL DEFAULT '',
   `action_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `conditions_FK` (`action_id`),
-  CONSTRAINT `conditions_FK` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -87,8 +83,6 @@ CREATE TABLE `doors` (
   `color` varchar(7) NOT NULL DEFAULT '',
   `room_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `doors_FK` (`room_id`),
-  CONSTRAINT `doors_FK` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,8 +108,6 @@ CREATE TABLE `extended_texts` (
   `text` varchar(500) NOT NULL,
   `room_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `extended_texts_FK` (`room_id`),
-  CONSTRAINT `extended_texts_FK` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

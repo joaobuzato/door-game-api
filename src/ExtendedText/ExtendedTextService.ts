@@ -11,18 +11,17 @@ export class ExtendedTextService implements Service<ExtendedText> {
     return await this.repository.getAll();
   }
   async getById(id: number) {
-    const item = await this.repository.getById(id);
-    return item;
+    return await this.repository.getById(id);
   }
   async insert(extendedText: ExtendedText) {
     if (!this.validate(extendedText)) {
-      throw new Error("extendedText Inválido");
+      return { success: false };
     }
     return await this.repository.insert(extendedText);
   }
   async update(extendedText: ExtendedText) {
     if (!this.validate(extendedText)) {
-      throw new Error("extendedText Inválido");
+      return { success: false };
     }
     return await this.repository.update(extendedText);
   }

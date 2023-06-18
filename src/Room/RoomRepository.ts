@@ -18,37 +18,52 @@ export class RoomRepository implements Repository<Room> {
 
   async getAll() {
     const query = "SELECT * FROM rooms";
-    const result: Room[] = await this.dataBase.query<Room>(query);
-    return Promise.all(
-      result.map((row: Room) => {
-        return this.mount(row);
-      })
-    );
+    return this.dataBase.query<Room>(query).then((result) => {
+      return Promise.all(
+        result.map((row: Room) => {
+          return this.mount(row);
+        })
+      );
+    });
   }
   async getById(id: number) {
     const query = `SELECT * FROM rooms WHERE id = ?`;
-    const result: Room[] = await this.dataBase.query<Room>(query, [id]);
-    if (result.length > 0) {
-      return this.mount(result[0]);
-    }
-    return null;
+    const result = await this.dataBase.query<Room>(query, [id]);
+    return result.length > 0 ? result[0] : null;
   }
   async insert(room: Room) {
     const query = `INSERT INTO rooms (title,text,path) VALUES (?,?,?)`;
-    await this.dataBase.query<Room>(query, [room.title, room.text, room.path]);
+    return this.dataBase
+      .query<Room>(query, [room.title, room.text, room.path])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        console.log("catch");
+        return { success: false };
+      });
   }
   async update(room: Room) {
     const query = `UPDATE rooms SET title = ?, text = ?, path = ? WHERE id = ?`;
-    await this.dataBase.query<Room>(query, [
-      room.title,
-      room.text,
-      room.path,
-      room.id,
-    ]);
+    return this.dataBase
+      .query<Room>(query, [room.title, room.text, room.path, room.id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async delete(id: number) {
     const query = `DELETE FROM rooms WHERE id = ?`;
-    await this.dataBase.query<Room>(query, [id]);
+    return this.dataBase
+      .query<Room>(query, [id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
 
   async mount(row: Room) {

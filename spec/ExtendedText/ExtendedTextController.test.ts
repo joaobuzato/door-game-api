@@ -24,21 +24,20 @@ describe("extendedTextRepository", () => {
     ];
 
     test("should getAll Correctly", async () => {
-      controller.service.getAll = jest
-        .fn()
-        .mockImplementationOnce(() => extendedTexts);
+      controller.service.getAll = jest.fn().mockResolvedValue(extendedTexts);
 
       const result = await controller.getAll();
 
       expect(result).toEqual(extendedTexts);
     });
     test("should propagate error if there is a throw in Service", async () => {
-      const errorMessage = "Service Call Error";
-      controller.service.getAll = jest.fn().mockImplementationOnce(() => {
-        throw new Error(errorMessage);
-      });
+      controller.service.getAll = jest
+        .fn()
+        .mockRejectedValue({ success: false });
 
-      await expect(controller.getAll()).rejects.toThrow(errorMessage);
+      await expect(controller.getAll()).rejects.toStrictEqual({
+        success: false,
+      });
       expect(controller.service.getAll).toBeCalledTimes(1);
     });
   });
@@ -51,9 +50,7 @@ describe("extendedTextRepository", () => {
     };
     const id = 1;
     test("should getById Correctly", async () => {
-      controller.service.getById = jest
-        .fn()
-        .mockImplementationOnce(() => extendedText);
+      controller.service.getById = jest.fn().mockResolvedValue(extendedText);
 
       const result = await controller.getById(id);
 
@@ -61,12 +58,8 @@ describe("extendedTextRepository", () => {
       expect(controller.service.getById).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in Service", async () => {
-      const errorMessage = "Service Call Error";
-      controller.service.getById = jest.fn().mockImplementationOnce(() => {
-        throw new Error(errorMessage);
-      });
-
-      await expect(controller.getById(id)).rejects.toThrow(errorMessage);
+      controller.service.getById = jest.fn().mockRejectedValue(null);
+      await expect(controller.getById(id)).rejects.toStrictEqual(null);
       expect(controller.service.getById).toBeCalledTimes(1);
     });
   });
@@ -85,14 +78,13 @@ describe("extendedTextRepository", () => {
       expect(controller.service.insert).toBeCalledWith(extendedText);
     });
     test("should propagate error if there is a throw in service", async () => {
-      const errorMessage = "Service Call Error";
-      controller.service.insert = jest.fn().mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      controller.service.insert = jest
+        .fn()
+        .mockRejectedValue({ success: false });
 
-      await expect(controller.insert(extendedText)).rejects.toThrow(
-        errorMessage
-      );
+      await expect(controller.insert(extendedText)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(controller.service.insert).toBeCalledWith(extendedText);
     });
   });
@@ -111,33 +103,35 @@ describe("extendedTextRepository", () => {
       expect(controller.service.update).toBeCalledWith(extendedText);
     });
     test("should propagate error if there is a throw in service", async () => {
-      const errorMessage = "Service Call Error";
-      controller.service.update = jest.fn().mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      controller.service.update = jest
+        .fn()
+        .mockRejectedValue({ success: false });
 
-      await expect(controller.update(extendedText)).rejects.toThrow(
-        errorMessage
-      );
+      await expect(controller.update(extendedText)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(controller.service.update).toBeCalledWith(extendedText);
     });
   });
   describe("delete", () => {
     const id = 1;
     test("should delete correctly", async () => {
-      controller.service.delete = jest.fn();
+      controller.service.delete = jest
+        .fn()
+        .mockResolvedValue({ success: true });
 
       await controller.delete(id);
 
       expect(controller.service.delete).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      controller.service.delete = jest.fn().mockImplementationOnce(() => {
-        throw new Error(errorMessage);
-      });
+      controller.service.delete = jest
+        .fn()
+        .mockRejectedValue({ success: false });
 
-      await expect(controller.delete(id)).rejects.toThrow(errorMessage);
+      await expect(controller.delete(id)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(controller.service.delete).toBeCalledWith(id);
     });
   });

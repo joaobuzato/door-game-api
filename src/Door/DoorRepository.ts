@@ -37,24 +37,36 @@ export class DoorRepository implements Repository<Door> {
   }
   async insert(door: Door) {
     const query = `INSERT INTO doors (path, color, room_id) VALUES (?,?,?)`;
-    await this.dataBase.query<Door>(query, [
-      door.path,
-      door.color,
-      door.room_id,
-    ]);
+    return this.dataBase
+      .query<Door>(query, [door.path, door.color, door.room_id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async update(door: Door) {
     const query = `UPDATE doors SET path = ?, color = ?, room_id = ? WHERE id = ?`;
-    await this.dataBase.query<Door>(query, [
-      door.path,
-      door.color,
-      door.room_id,
-      door.id,
-    ]);
+    return this.dataBase
+      .query<Door>(query, [door.path, door.color, door.room_id, door.id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async delete(id: number) {
     const query = `DELETE FROM doors WHERE id = ?`;
-    await this.dataBase.query<Door>(query, [id]);
+    return this.dataBase
+      .query<Door>(query, [id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
 
   mount(row: Door) {

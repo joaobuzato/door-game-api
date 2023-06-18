@@ -11,23 +11,22 @@ export class ActionService implements Service<Action> {
     return await this.repository.getAll();
   }
   async getById(id: number) {
-    const item = await this.repository.getById(id);
-    return item;
+    return await this.repository.getById(id);
   }
   async insert(action: Action) {
     if (!this.validate(action)) {
-      throw new Error("action Inválido");
+      return { success: false };
     }
     return await this.repository.insert(action);
   }
   async update(action: Action) {
     if (!this.validate(action)) {
-      throw new Error("action Inválido");
+      return { success: false };
     }
-    await this.repository.update(action);
+    return await this.repository.update(action);
   }
   async delete(id: number) {
-    this.repository.delete(id);
+    return this.repository.delete(id);
   }
 
   validate = (action: Action) => {

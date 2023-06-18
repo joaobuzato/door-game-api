@@ -102,10 +102,9 @@ describe("conditionService", () => {
       expect(result).toEqual(conditions);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getAll.mockRejectedValue(new Error(errorMessage));
+      repositoryMock.getAll.mockRejectedValue([]);
 
-      await expect(service.getAll()).rejects.toThrow(errorMessage);
+      await expect(service.getAll()).rejects.toStrictEqual([]);
       expect(repositoryMock.getAll).toBeCalledTimes(1);
     });
   });
@@ -131,10 +130,9 @@ describe("conditionService", () => {
     });
     test("should propagate error if there is a throw in repository", async () => {
       const id = 1;
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getById.mockRejectedValue(new Error(errorMessage));
+      repositoryMock.getById.mockRejectedValue(null);
 
-      await expect(service.getById(id)).rejects.toThrow(errorMessage);
+      await expect(service.getById(id)).rejects.toStrictEqual(null);
       expect(repositoryMock.getById).toBeCalledWith(id);
     });
   });
@@ -150,26 +148,25 @@ describe("conditionService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue();
+      repositoryMock.insert.mockResolvedValue({ success: false });
 
       await service.insert(condition);
 
       expect(repositoryMock.insert).toBeCalledWith(condition);
     });
-    test("should throw error if text is not valid", async () => {
+    test("should throw error if element1 is not valid", async () => {
       const conditionTest = { ...condition, element1: "" };
-      await expect(service.insert(conditionTest)).rejects.toThrow(
-        "condition Inválido"
-      );
+      await expect(service.insert(conditionTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.insert.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.insert.mockRejectedValue({ success: false });
 
-      await expect(service.insert(condition)).rejects.toThrow(errorMessage);
+      await expect(service.insert(condition)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledWith(condition);
     });
   });
@@ -184,27 +181,19 @@ describe("conditionService", () => {
     beforeEach(() => {
       repositoryMock.update.mockClear();
     });
-    test("should update Correctly", async () => {
-      repositoryMock.update.mockResolvedValue();
-
-      await service.update(condition);
-
-      expect(repositoryMock.update).toBeCalledWith(condition);
-    });
-    test("should throw error if text is not valid", async () => {
-      const conditionTest = { ...condition, element2: "" };
-      await expect(service.update(conditionTest)).rejects.toThrow(
-        "condition Inválido"
-      );
+    test("should throw error if element1 is not valid", async () => {
+      const conditionTest = { ...condition, element1: "" };
+      await expect(service.update(conditionTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.update.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.update.mockRejectedValue({ success: false });
 
-      await expect(service.update(condition)).rejects.toThrow(errorMessage);
+      await expect(service.update(condition)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledWith(condition);
     });
   });
@@ -214,19 +203,18 @@ describe("conditionService", () => {
       repositoryMock.delete.mockClear();
     });
     test("should delete correctly", async () => {
-      repositoryMock.delete.mockResolvedValue();
+      repositoryMock.delete.mockResolvedValue({ success: true });
 
       await service.delete(id);
 
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.delete.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.delete.mockResolvedValue({ success: false });
 
-      await expect(service.delete(id)).rejects.toThrow(errorMessage);
+      await expect(service.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
   });

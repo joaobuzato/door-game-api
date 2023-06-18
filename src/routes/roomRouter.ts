@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { Room } from "../Room/Room";
-import { log } from "../Logger";
 import RoomController from "../Room/RoomController";
 import { authenticateToken, emptyAuthMiddleware } from "./authRouter";
 const roomsRouter = Router();
@@ -12,7 +11,6 @@ roomsRouter.get("/rooms", async (request, response) => {
     return response.status(200).json(body);
   } catch (e) {
     if (e instanceof Error) {
-      log(e.message);
       return response.status(400).json({ message: "Erro ao obter rooms" });
     }
   }
@@ -26,13 +24,11 @@ roomsRouter.get(
       const { id } = request.params;
       const body = await controller.getById(Number(id));
       if (!body) {
-        return response.status(404).json({ message: "room não encontrado" });
+        return response.status(404).json({ message: "Room não encontrado" });
       }
-      response.json(body);
-      return response.status(200);
+      return response.status(200).json(body);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response.status(400).json({ message: "Erro ao obter room" });
       }
     }
@@ -43,16 +39,24 @@ roomsRouter.post(
   "/rooms",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const room = new Room(request.body);
-      await controller.insert(room);
-      return response.status(201).json({ message: "Inserido!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao salvar room" });
-      }
-    }
+    const room = new Room(request.body);
+    controller
+      .update(room)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(201)
+            .json({ success: true, message: "Criado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar room" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar room" });
+      });
   }
 );
 
@@ -60,34 +64,49 @@ roomsRouter.put(
   "/rooms/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      const room = new Room(request.body, Number(id));
-      await controller.update(room);
-      return response.status(204).send({ message: "Atualizado!!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao atualizar room" });
-      }
-    }
+    const { id } = request.params;
+    const room = new Room(request.body, Number(id));
+    controller
+      .update(room)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Atualizado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar room" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar room" });
+      });
   }
 );
 roomsRouter.delete(
   "/rooms/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      await controller.delete(Number(id));
-      response.json({ message: "Deletado!!" });
-      return response.status(204);
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao deletar room" });
-      }
-    }
+    const { id } = request.params;
+    controller
+      .delete(Number(id))
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Deletado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar room" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar room" });
+      });
   }
 );
 

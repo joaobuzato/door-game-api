@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { Action } from "../Action/Action";
-import { log } from "../Logger";
 import ActionController from "../Action/ActionController";
 import { authenticateToken, emptyAuthMiddleware } from "./authRouter";
 const actionsRouter = Router();
@@ -16,7 +15,6 @@ actionsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao obter actions" });
       }
     }
@@ -37,7 +35,6 @@ actionsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response.status(400).json({ message: "Erro ao obter action" });
       }
     }
@@ -54,7 +51,6 @@ actionsRouter.post(
       response.status(201).json({ message: "Inserido!" });
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao salvar action" });
       }
     }
@@ -72,7 +68,6 @@ actionsRouter.put(
       return response.status(204).send({ message: "Atualizado!!" });
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response
           .status(400)
           .json({ message: "Erro ao atualizar action" });
@@ -91,7 +86,6 @@ actionsRouter.delete(
       return response.status(204);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response.status(400).json({ message: "Erro ao deletar action" });
       }
     }

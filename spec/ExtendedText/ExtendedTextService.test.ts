@@ -101,26 +101,25 @@ describe("extendedTextRepository", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue();
+      repositoryMock.insert.mockResolvedValue({ success: true });
 
       await service.insert(extendedText);
 
       expect(repositoryMock.insert).toBeCalledWith(extendedText);
     });
-    test("should throw error if text is not valid", async () => {
+    test("should reject promise if text is not valid", async () => {
       const extendedTextTest = { ...extendedText, text: "" };
-      await expect(service.insert(extendedTextTest)).rejects.toThrow(
-        "extendedText Inválido"
-      );
+      await expect(service.insert(extendedTextTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.insert.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.insert.mockRejectedValue({ success: false });
 
-      await expect(service.insert(extendedText)).rejects.toThrow(errorMessage);
+      await expect(service.insert(extendedText)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledWith(extendedText);
     });
   });
@@ -135,26 +134,25 @@ describe("extendedTextRepository", () => {
       repositoryMock.update.mockClear();
     });
     test("should update Correctly", async () => {
-      repositoryMock.update.mockResolvedValue();
+      repositoryMock.update.mockResolvedValue({ success: false });
 
       await service.update(extendedText);
 
       expect(repositoryMock.update).toBeCalledWith(extendedText);
     });
-    test("should throw error if text is not valid", async () => {
+    test("should reject if text is not valid", async () => {
       const extendedTextTest = { ...extendedText, text: "" };
-      await expect(service.update(extendedTextTest)).rejects.toThrow(
-        "extendedText Inválido"
-      );
+      await expect(service.update(extendedTextTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.update.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.update.mockRejectedValue({ success: false });
 
-      await expect(service.update(extendedText)).rejects.toThrow(errorMessage);
+      await expect(service.update(extendedText)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledWith(extendedText);
     });
   });
@@ -164,19 +162,18 @@ describe("extendedTextRepository", () => {
       repositoryMock.delete.mockClear();
     });
     test("should delete correctly", async () => {
-      repositoryMock.delete.mockResolvedValue();
+      repositoryMock.delete.mockResolvedValue({ success: false });
 
       await service.delete(id);
 
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.delete.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.delete.mockRejectedValue({ success: false });
 
-      await expect(service.delete(id)).rejects.toThrow(errorMessage);
+      await expect(service.delete(id)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
   });

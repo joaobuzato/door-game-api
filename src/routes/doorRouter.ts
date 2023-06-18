@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { Door } from "../Door/Door";
-import { log } from "../Logger";
 import DoorController from "../Door/DoorController";
 import { authenticateToken, emptyAuthMiddleware } from "./authRouter";
 const doorsRouter = Router();
@@ -16,7 +15,6 @@ doorsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         response.status(400).json({ message: "Erro ao obter doors" });
       }
     }
@@ -37,62 +35,107 @@ doorsRouter.get(
       return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
         return response.status(400).json({ message: "Erro ao obter door" });
       }
     }
   }
 );
-
-doorsRouter.post(
-  "/doors",
+extendedTextsRouter.get(
+  "/extendedTexts/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
     try {
-      const door = new Door(request.body);
-      await controller.insert(door);
-      return response.status(201).json({ message: "Inserido!" });
+      const { id } = request.params;
+      const body = await controller.getById(Number(id));
+      if (!body) {
+        return response
+          .status(404)
+          .json({ message: "ExtendedText não encontrado" });
+      }
+      response.json(body);
+      return response.status(200);
     } catch (e) {
       if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao salvar door" });
+        return response
+          .status(400)
+          .json({ message: "Erro ao obter extendedText" });
       }
     }
   }
 );
 
-doorsRouter.put(
-  "/doors/:id",
+extendedTextsRouter.post(
+  "/extendedTexts",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      const door = new Door(request.body, Number(id));
-      await controller.update(door);
-      return response.status(204).send({ message: "Atualizado!!" });
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao atualizar door" });
-      }
-    }
+    const extendedText = new ExtendedText(request.body);
+    controller
+      .update(extendedText)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(201)
+            .json({ success: true, message: "Criado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao criar extendedText" });
+      });
   }
 );
-doorsRouter.delete(
-  "/doors/:id",
+
+extendedTextsRouter.put(
+  "/extendedTexts/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
-    try {
-      const { id } = request.params;
-      await controller.delete(Number(id));
-      response.json({ message: "Deletado!!" });
-      return response.status(204);
-    } catch (e) {
-      if (e instanceof Error) {
-        log(e.message);
-        return response.status(400).json({ message: "Erro ao deletar door" });
-      }
-    }
+    const { id } = request.params;
+    const extendedText = new ExtendedText(request.body, Number(id));
+    controller
+      .update(extendedText)
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Atualizado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao atualizar extendedText" });
+      });
+  }
+);
+extendedTextsRouter.delete(
+  "/extendedTexts/:id",
+  process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
+  async (request, response) => {
+    const { id } = request.params;
+    controller
+      .delete(Number(id))
+      .then((result) => {
+        if (result.success)
+          return response
+            .status(200)
+            .json({ success: true, message: "Deletado" });
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar extendedText" });
+      })
+      .catch((e) => {
+        console.log(e);
+        return response
+          .status(400)
+          .json({ success: false, message: "Erro ao deletar extendedText" });
+      });
   }
 );
 

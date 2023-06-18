@@ -59,10 +59,9 @@ describe("roomService", () => {
       expect(result).toEqual(rooms);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getAll.mockRejectedValue(new Error(errorMessage));
+      repositoryMock.getAll.mockRejectedValue({ success: false });
 
-      await expect(service.getAll()).rejects.toThrow(errorMessage);
+      await expect(service.getAll()).rejects.toStrictEqual({ success: false });
       expect(repositoryMock.getAll).toBeCalledTimes(1);
     });
   });
@@ -90,10 +89,11 @@ describe("roomService", () => {
     });
     test("should propagate error if there is a throw in repository", async () => {
       const id = 1;
-      const errorMessage = "Repository Call Error";
-      repositoryMock.getById.mockRejectedValue(new Error(errorMessage));
+      repositoryMock.getById.mockRejectedValue({ success: false });
 
-      await expect(service.getById(id)).rejects.toThrow(errorMessage);
+      await expect(service.getById(id)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.getById).toBeCalledWith(id);
     });
   });
@@ -113,7 +113,7 @@ describe("roomService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue();
+      repositoryMock.insert.mockResolvedValue({ success: true });
 
       await service.insert(room);
 
@@ -121,16 +121,17 @@ describe("roomService", () => {
     });
     test("should throw error if text is not valid", async () => {
       const roomTest = { ...room, title: "" };
-      await expect(service.insert(roomTest)).rejects.toThrow("room Inválido");
+      await expect(service.insert(roomTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.insert.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.insert.mockRejectedValue({ success: false });
 
-      await expect(service.insert(room)).rejects.toThrow(errorMessage);
+      await expect(service.insert(room)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.insert).toBeCalledWith(room);
     });
   });
@@ -148,7 +149,7 @@ describe("roomService", () => {
       repositoryMock.update.mockClear();
     });
     test("should update Correctly", async () => {
-      repositoryMock.update.mockResolvedValue();
+      repositoryMock.update.mockResolvedValue({ success: true });
 
       await service.update(room);
 
@@ -156,16 +157,17 @@ describe("roomService", () => {
     });
     test("should throw error if text is not valid", async () => {
       const roomTest = { ...room, title: "" };
-      await expect(service.update(roomTest)).rejects.toThrow("room Inválido");
+      await expect(service.update(roomTest)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
-      repositoryMock.update.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.update.mockRejectedValue({ success: false });
 
-      await expect(service.update(room)).rejects.toThrow(errorMessage);
+      await expect(service.update(room)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.update).toBeCalledWith(room);
     });
   });
@@ -175,7 +177,7 @@ describe("roomService", () => {
       repositoryMock.delete.mockClear();
     });
     test("should delete correctly", async () => {
-      repositoryMock.delete.mockResolvedValue();
+      repositoryMock.delete.mockResolvedValue({ success: true });
 
       await service.delete(id);
 
@@ -183,11 +185,11 @@ describe("roomService", () => {
     });
     test("should propagate error if there is a throw in repository", async () => {
       const errorMessage = "Repository Call Error";
-      repositoryMock.delete.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      repositoryMock.delete.mockRejectedValue({ success: false });
 
-      await expect(service.delete(id)).rejects.toThrow(errorMessage);
+      await expect(service.delete(id)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
   });

@@ -54,11 +54,10 @@ describe("RoomRepository", () => {
       expect(result).toEqual(rooms);
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM rooms");
     });
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      await expect(repository.getAll()).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM rooms");
     });
   });
@@ -96,12 +95,12 @@ describe("RoomRepository", () => {
         [id]
       );
     });
-    test("should throw if promise is rejected", async () => {
+    test("should reject if promise is rejected", async () => {
       const id = 1;
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
 
-      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      databaseMock.query.mockRejectedValue([]);
+
+      await expect(repository.getById(id)).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM rooms WHERE id = ?",
         [id]
@@ -145,19 +144,21 @@ describe("RoomRepository", () => {
     test("should insert correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.insert(room);
-
+      await expect(repository.insert(room)).resolves.toStrictEqual({
+        success: true,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
         [room.title, room.text, room.path]
       );
     });
 
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.insert(room)).rejects.toThrow(errorMessage);
+      await expect(repository.insert(room)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
         [room.title, room.text, room.path]
@@ -186,30 +187,21 @@ describe("RoomRepository", () => {
     test("should update correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.update(room);
-
+      await expect(repository.update(room)).resolves.toStrictEqual({
+        success: true,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE rooms SET title = ?, text = ?, path = ? WHERE id = ?",
         [room.title, room.text, room.path, room.id]
       );
     });
 
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
-      const room = new Room(
-        {
-          title: "title 3",
-          text: "texasdasdt",
-          path: "path",
-          actions: [],
-          doors: [],
-          rooms: [],
-        },
-        1
-      );
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.update(room)).rejects.toThrow(errorMessage);
+      await expect(repository.update(room)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE rooms SET title = ?, text = ?, path = ? WHERE id = ?",
         [room.title, room.text, room.path, room.id]
@@ -228,7 +220,9 @@ describe("RoomRepository", () => {
     test("should delete correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.delete(id);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: true,
+      });
 
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM rooms WHERE id = ?",
@@ -237,10 +231,11 @@ describe("RoomRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM rooms WHERE id = ?",
         [id]

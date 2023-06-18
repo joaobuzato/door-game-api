@@ -11,23 +11,22 @@ export class RoomService implements Service<Room> {
     return await this.repository.getAll();
   }
   async getById(id: number) {
-    const item = await this.repository.getById(id);
-    return item;
+    return await this.repository.getById(id);
   }
   async insert(room: Room) {
     if (!this.validate(room)) {
-      throw new Error("room Inválido");
+      return { success: false };
     }
     return await this.repository.insert(room);
   }
   async update(room: Room) {
     if (!this.validate(room)) {
-      throw new Error("room Inválido");
+      return { success: false };
     }
-    await this.repository.update(room);
+    return await this.repository.update(room);
   }
   async delete(id: number) {
-    this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 
   validate = (room: Room) => {

@@ -38,11 +38,12 @@ describe("extendedTextRepository", () => {
         "SELECT * FROM extended_texts"
       );
     });
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue({ success: false });
 
-      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      await expect(repository.getAll()).rejects.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM extended_texts"
       );
@@ -78,10 +79,11 @@ describe("extendedTextRepository", () => {
     });
     test("should throw if promise is rejected", async () => {
       const id = 1;
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue({ success: false });
 
-      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      await expect(repository.getById(id)).rejects.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM extended_texts WHERE id = ?",
         [id]
@@ -125,12 +127,11 @@ describe("extendedTextRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.insert(extendedText)).rejects.toThrow(
-        errorMessage
-      );
+      await expect(repository.insert(extendedText)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)",
         [extendedText.sentence, extendedText.text, extendedText.room_id]
@@ -154,7 +155,9 @@ describe("extendedTextRepository", () => {
     test("should update correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.update(extendedText);
+      await expect(repository.update(extendedText)).resolves.toStrictEqual({
+        success: true,
+      });
 
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?",
@@ -168,17 +171,16 @@ describe("extendedTextRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
       const extendedText = new ExtendedText({
         sentence: "sentence",
         room_id: 1,
         text: "text",
       });
 
-      await expect(repository.update(extendedText)).rejects.toThrow(
-        errorMessage
-      );
+      await expect(repository.update(extendedText)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?",
         [
@@ -202,8 +204,9 @@ describe("extendedTextRepository", () => {
     test("should delete correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.delete(id);
-
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: true,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM extended_texts WHERE id = ?",
         [id]
@@ -211,10 +214,11 @@ describe("extendedTextRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM extended_texts WHERE id = ?",
         [id]

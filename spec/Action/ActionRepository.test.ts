@@ -46,10 +46,9 @@ describe("ActionRepository", () => {
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM actions");
     });
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      await expect(repository.getAll()).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM actions");
     });
   });
@@ -89,16 +88,15 @@ describe("ActionRepository", () => {
     });
     test("should throw if promise is rejected", async () => {
       const id = 1;
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      await expect(repository.getById(id)).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM actions WHERE id = ?",
         [id]
       );
     });
-    test("should return null if there is no action", async () => {
+    test("should return null if there is no door", async () => {
       const id = 1;
       databaseMock.query.mockResolvedValue([]);
 
@@ -147,10 +145,11 @@ describe("ActionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.insert(action)).rejects.toThrow(errorMessage);
+      await expect(repository.insert(action)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO actions (type,button_text,element,qtd,room_id) VALUES (?,?,?,?,?)",
         [
@@ -200,20 +199,11 @@ describe("ActionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
-      const action = new Action(
-        {
-          type: "typeTest",
-          button_text: "button_text",
-          element: "element",
-          qtd: 4,
-          room_id: 1,
-        },
-        1
-      );
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.update(action)).rejects.toThrow(errorMessage);
+      await expect(repository.update(action)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE actions SET type = ?, button_text = ?, element = ?, qtd = ?, room_id = ? WHERE id = ?",
         [
@@ -248,10 +238,11 @@ describe("ActionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM actions WHERE id = ?",
         [id]

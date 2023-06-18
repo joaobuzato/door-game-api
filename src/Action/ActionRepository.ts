@@ -41,28 +41,49 @@ export class ActionRepository implements Repository<Action> {
   }
   async insert(action: Action) {
     const query = `INSERT INTO actions (type,button_text,element,qtd,room_id) VALUES (?,?,?,?,?)`;
-    await this.dataBase.query<Action>(query, [
-      action.type,
-      action.button_text,
-      action.element,
-      action.qtd,
-      action.room_id,
-    ]);
+    return this.dataBase
+      .query<Action>(query, [
+        action.type,
+        action.button_text,
+        action.element,
+        action.qtd,
+        action.room_id,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async update(action: Action) {
     const query = `UPDATE actions SET type = ?, button_text = ?, element = ?, qtd = ?, room_id = ? WHERE id = ?`;
-    await this.dataBase.query<Action>(query, [
-      action.type,
-      action.button_text,
-      action.element,
-      action.qtd,
-      action.room_id,
-      action.id || 0,
-    ]);
+    return this.dataBase
+      .query<Action>(query, [
+        action.type,
+        action.button_text,
+        action.element,
+        action.qtd,
+        action.room_id,
+        action.id || 0,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async delete(id: number) {
     const query = `DELETE FROM actions WHERE id = ?`;
-    await this.dataBase.query<Action>(query, [id]);
+    return this.dataBase
+      .query<Action>(query, [id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
 
   async mount(row: Action) {

@@ -45,24 +45,45 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
   }
   async insert(extendedText: ExtendedText) {
     const query = `INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)`;
-    await this.dataBase.query<ExtendedText>(query, [
-      extendedText.sentence,
-      extendedText.text,
-      extendedText.room_id,
-    ]);
+    return this.dataBase
+      .query<ExtendedText>(query, [
+        extendedText.sentence,
+        extendedText.text,
+        extendedText.room_id,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async update(extendedText: ExtendedText) {
     const query = `UPDATE extended_texts SET sentence = ?, text = ?, room_id = ? WHERE id = ?`;
-    await this.dataBase.query<ExtendedText>(query, [
-      extendedText.sentence,
-      extendedText.text,
-      extendedText.room_id,
-      extendedText.id,
-    ]);
+    return this.dataBase
+      .query<ExtendedText>(query, [
+        extendedText.sentence,
+        extendedText.text,
+        extendedText.room_id,
+        extendedText.id,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async delete(id: number) {
     const query = `DELETE FROM extended_texts WHERE id = ?`;
-    await this.dataBase.query<ExtendedText>(query, [id]);
+    return this.dataBase
+      .query<ExtendedText>(query, [id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
 
   mount(row: ExtendedText) {

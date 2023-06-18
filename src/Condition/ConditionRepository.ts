@@ -25,28 +25,49 @@ export class ConditionRepository implements Repository<Condition> {
   async insert(condition: Condition) {
     const query =
       "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)";
-    await this.dataBase.query<Condition>(query, [
-      condition.element1,
-      condition.type,
-      condition.element2,
-      condition.action_id,
-      condition.id,
-    ]);
+    return this.dataBase
+      .query<Condition>(query, [
+        condition.element1,
+        condition.type,
+        condition.element2,
+        condition.action_id,
+        condition.id,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async update(condition: Condition) {
     const query =
       "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?";
-    await this.dataBase.query<Condition>(query, [
-      condition.element1,
-      condition.type,
-      condition.element2,
-      condition.action_id,
-      condition.id,
-    ]);
+    return this.dataBase
+      .query<Condition>(query, [
+        condition.element1,
+        condition.type,
+        condition.element2,
+        condition.action_id,
+        condition.id,
+      ])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
   async delete(id: number) {
     const query = "DELETE FROM conditions WHERE id = ?";
-    await this.dataBase.query(query, [id]);
+    return this.dataBase
+      .query(query, [id])
+      .then(() => {
+        return { success: true };
+      })
+      .catch(() => {
+        return { success: false };
+      });
   }
 
   mount(condition: Condition) {

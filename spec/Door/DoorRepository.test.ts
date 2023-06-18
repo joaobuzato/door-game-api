@@ -43,10 +43,9 @@ describe("DoorRepository", () => {
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM doors");
     });
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      await expect(repository.getAll()).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM doors");
     });
   });
@@ -80,10 +79,9 @@ describe("DoorRepository", () => {
     });
     test("should throw if promise is rejected", async () => {
       const id = 1;
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      await expect(repository.getById(id)).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM doors WHERE id = ?",
         [id]
@@ -130,10 +128,11 @@ describe("DoorRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.insert(door)).rejects.toThrow(errorMessage);
+      await expect(repository.insert(door)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO doors (path, color, room_id) VALUES (?,?,?)",
         [door.path, door.color, door.room_id]
@@ -168,18 +167,11 @@ describe("DoorRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
-      const door = new Door(
-        {
-          path: "patfh",
-          color: "#000fd0",
-          room_id: 2,
-        },
-        1
-      );
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.update(door)).rejects.toThrow(errorMessage);
+      await expect(repository.update(door)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE doors SET path = ?, color = ?, room_id = ? WHERE id = ?",
         [door.path, door.color, door.room_id, door.id]
@@ -207,10 +199,11 @@ describe("DoorRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM doors WHERE id = ?",
         [id]

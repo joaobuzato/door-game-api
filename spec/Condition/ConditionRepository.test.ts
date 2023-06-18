@@ -26,7 +26,7 @@ describe("ConditionRepository", () => {
     beforeEach(() => {
       databaseMock.query.mockClear();
     });
-    test("should get All correctly", async () => {
+    test("should getAll correctly", async () => {
       databaseMock.query.mockResolvedValue(conditions);
 
       const result = await repository.getAll();
@@ -36,11 +36,10 @@ describe("ConditionRepository", () => {
         "SELECT * FROM conditions"
       );
     });
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getAll()).rejects.toThrow(errorMessage);
+      await expect(repository.getAll()).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM conditions"
       );
@@ -79,11 +78,10 @@ describe("ConditionRepository", () => {
       );
     });
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getByActionId(action_id)).rejects.toThrow(
-        errorMessage
+      await expect(repository.getByActionId(action_id)).rejects.toStrictEqual(
+        []
       );
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM conditions WHERE action_id = ?",
@@ -116,17 +114,16 @@ describe("ConditionRepository", () => {
         [id]
       );
     });
-    test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+    test("should reject if promise is rejected", async () => {
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.getById(id)).rejects.toThrow(errorMessage);
+      await expect(repository.getById(id)).rejects.toStrictEqual([]);
       expect(databaseMock.query).toHaveBeenCalledWith(
         "SELECT * FROM conditions WHERE id = ?",
         [id]
       );
     });
-    test("should return null if there is no condition", async () => {
+    test("should return null if there is no room", async () => {
       const id = 1;
       databaseMock.query.mockResolvedValue([]);
 
@@ -152,7 +149,9 @@ describe("ConditionRepository", () => {
     test("should insert correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.insert(condition);
+      await expect(repository.insert(condition)).resolves.toStrictEqual({
+        success: true,
+      });
 
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
@@ -167,10 +166,11 @@ describe("ConditionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.insert(condition)).rejects.toThrow(errorMessage);
+      await expect(repository.insert(condition)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
         [
@@ -199,7 +199,9 @@ describe("ConditionRepository", () => {
     test("should update correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.update(condition);
+      await expect(repository.update(condition)).resolves.toStrictEqual({
+        success: true,
+      });
 
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?",
@@ -214,10 +216,11 @@ describe("ConditionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.update(condition)).rejects.toThrow(errorMessage);
+      await expect(repository.update(condition)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "UPDATE conditions SET element1 = ?, type = ?, element2 = ?, action_id = ? WHERE id = ?",
         [
@@ -238,8 +241,9 @@ describe("ConditionRepository", () => {
     test("should delete correctly", async () => {
       databaseMock.query.mockResolvedValue([]);
 
-      await repository.delete(id);
-
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: true,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM conditions WHERE id = ?",
         [id]
@@ -247,10 +251,11 @@ describe("ConditionRepository", () => {
     });
 
     test("should throw if promise is rejected", async () => {
-      const errorMessage = "Database query error";
-      databaseMock.query.mockRejectedValue(new Error(errorMessage));
+      databaseMock.query.mockRejectedValue([]);
 
-      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+      await expect(repository.delete(id)).resolves.toStrictEqual({
+        success: false,
+      });
       expect(databaseMock.query).toHaveBeenCalledWith(
         "DELETE FROM conditions WHERE id = ?",
         [id]

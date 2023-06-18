@@ -11,18 +11,17 @@ export class ConditionService implements Service<Condition> {
     return await this.repository.getAll();
   }
   async getById(id: number) {
-    const item = await this.repository.getById(id);
-    return item;
+    return await this.repository.getById(id);
   }
   async insert(condition: Condition) {
     if (!this.validate(condition)) {
-      throw new Error("condition Inválido");
+      return { success: false };
     }
     return await this.repository.insert(condition);
   }
   async update(condition: Condition) {
     if (!this.validate(condition)) {
-      throw new Error("condition Inválido");
+      return { success: false };
     }
     return await this.repository.update(condition);
   }

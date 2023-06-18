@@ -16,18 +16,18 @@ export class DoorService implements Service<Door> {
   }
   async insert(door: Door) {
     if (!this.validate(door)) {
-      throw new Error("door Inválido");
+      return { success: false };
     }
     return await this.repository.insert(door);
   }
   async update(door: Door) {
     if (!this.validate(door)) {
-      throw new Error("door Inválido");
+      return { success: false };
     }
-    await this.repository.update(door);
+    return await this.repository.update(door);
   }
   async delete(id: number) {
-    this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 
   validate = (door: Door) => {
