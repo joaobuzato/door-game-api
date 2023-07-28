@@ -7,12 +7,12 @@ import { Room } from "./Room";
 export class RoomRepository implements Repository<Room> {
   dataBase: DataBase;
   actionRepository: ActionRepository;
-  roomRepository: ExtendedTextRepository;
+  extendedTextRepository: ExtendedTextRepository;
   doorRepository: DoorRepository;
   constructor(dataBase: DataBase) {
     this.dataBase = dataBase;
     this.actionRepository = new ActionRepository(dataBase);
-    this.roomRepository = new ExtendedTextRepository(dataBase);
+    this.extendedTextRepository = new ExtendedTextRepository(dataBase);
     this.doorRepository = new DoorRepository(dataBase);
   }
 
@@ -69,7 +69,7 @@ export class RoomRepository implements Repository<Room> {
   async mount(row: Room) {
     const room = new Room(row, row.id);
     room.actions = await this.actionRepository.getByRoomId(room.id);
-    room.rooms = await this.roomRepository.getByRoomId(room.id);
+    room.extendedTexts = await this.extendedTextRepository.getByRoomId(room.id);
     room.doors = await this.doorRepository.getByRoomId(room.id);
     return room;
   }

@@ -13,7 +13,7 @@ describe("GET /rooms", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ describe("GET /rooms", () => {
       path: "paasdasdth",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     },
   ];
   beforeEach(() => {
@@ -62,7 +62,7 @@ describe("GET /rooms/:id", () => {
     path: "path",
     actions: [],
     doors: [],
-    rooms: [],
+    extendedTexts: [],
   };
   beforeEach(() => {
     getByIdSpy = jest.spyOn(RoomController.prototype, "getById");
@@ -117,7 +117,7 @@ describe("POST /rooms/:id", () => {
     path: "paasdasdth",
     actions: [],
     doors: [],
-    rooms: [],
+    extendedTexts: [],
   });
   beforeEach(() => {
     insertSpy = jest.spyOn(RoomController.prototype, "insert");
@@ -166,7 +166,7 @@ describe("PUT /rooms/:id", () => {
       path: "paasdasdth",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     },
     id
   );

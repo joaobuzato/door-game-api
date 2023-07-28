@@ -36,7 +36,7 @@ describe("roomService", () => {
         path: "path",
         actions: [],
         doors: [],
-        rooms: [],
+        extendedTexts: [],
       },
       {
         id: 2,
@@ -45,7 +45,7 @@ describe("roomService", () => {
         path: "paasdasdth",
         actions: [],
         doors: [],
-        rooms: [],
+        extendedTexts: [],
       },
     ];
     beforeEach(() => {
@@ -73,7 +73,7 @@ describe("roomService", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     };
     beforeEach(() => {
       repositoryMock.getById.mockClear();
@@ -105,7 +105,7 @@ describe("roomService", () => {
         path: "path",
         actions: [],
         doors: [],
-        rooms: [],
+        extendedTexts: [],
       },
       1
     );
@@ -143,7 +143,7 @@ describe("roomService", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     };
     beforeEach(() => {
       repositoryMock.update.mockClear();
@@ -184,7 +184,6 @@ describe("roomService", () => {
       expect(repositoryMock.delete).toBeCalledWith(id);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      const errorMessage = "Repository Call Error";
       repositoryMock.delete.mockRejectedValue({ success: false });
 
       await expect(service.delete(id)).rejects.toStrictEqual({

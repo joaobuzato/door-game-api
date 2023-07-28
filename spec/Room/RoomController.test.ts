@@ -16,7 +16,7 @@ describe("roomRepository", () => {
         path: "path",
         actions: [],
         doors: [],
-        rooms: [],
+        extendedTexts: [],
       },
       {
         id: 2,
@@ -25,7 +25,7 @@ describe("roomRepository", () => {
         path: "paasdasdth",
         actions: [],
         doors: [],
-        rooms: [],
+        extendedTexts: [],
       },
     ];
 
@@ -55,7 +55,7 @@ describe("roomRepository", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     };
     const id = 1;
     test("should getById Correctly", async () => {
@@ -80,7 +80,7 @@ describe("roomRepository", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     };
     test("should insert Correctly", async () => {
       controller.service.insert = jest.fn();
@@ -108,7 +108,7 @@ describe("roomRepository", () => {
       path: "path",
       actions: [],
       doors: [],
-      rooms: [],
+      extendedTexts: [],
     };
     test("should update Correctly", async () => {
       controller.service.update = jest.fn();
