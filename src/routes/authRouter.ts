@@ -1,20 +1,25 @@
 import { Router } from "express";
+import UserController from "../User/UserController";
 const authRouter = Router();
 
-authRouter.post("/auth", (req, res) => {
+authRouter.post("/auth", async (req, res) => {
+  const controller = new UserController();
   const { username, password } = req.body;
+  const user = await controller.getByUsername(username);
 
-  if (username === "usuario" && password === "senha") {
-    const token = jwt.sign({ username }, "segredo", { expiresIn: "1h" });
-
-    res.json({ token });
-  } else {
-    res.status(401).json({ error: "Credenciais inválidas" });
+  if (!user || user.password !== password) {
+    res.status(401);
+    return res.json({ error: "Credenciais inválidas" });
   }
+
+  const token = jwt.sign({ username }, "segredo", { expiresIn: "1h" });
+
+  res.status(200);
+  res.json({ token });
 });
 
 import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 function emptyAuthMiddleware(req: Request, res: Response, next: NextFunction) {
   next();
