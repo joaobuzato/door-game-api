@@ -2,11 +2,19 @@
 
 Esta é uma API em Node JS com Express, para manipulação de um banco de dados SQL, implementando o modelo MVC para o CRUD das entidades.
 
-# Instalação
+## Como rodar?
 
-npm i
+- rodar sudo apt-get install mysql-server
 
-npm start
+- rodar mysql -u `usuario` -p `senha do usuario`
+
+- executar o arquivo sql/door_Game.sql
+
+- no projeto, rodar npm i
+
+- npm run start
+
+- Pronto :D
 
 # testes
 
