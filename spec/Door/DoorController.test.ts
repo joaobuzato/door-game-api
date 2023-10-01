@@ -12,12 +12,14 @@ describe("doorRepository", () => {
       {
         id: 1,
         path: "path",
+        text: "Text",
         color: "#000000",
         room_id: 2,
       },
       {
         id: 2,
         path: "path",
+        text: "Text",
         color: "#033000",
         room_id: 5,
       },
@@ -41,6 +43,7 @@ describe("doorRepository", () => {
     const door: Door = {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#000000",
       room_id: 2,
     };
@@ -63,6 +66,7 @@ describe("doorRepository", () => {
     const door: Door = {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#000000",
       room_id: 2,
     };
@@ -88,6 +92,7 @@ describe("doorRepository", () => {
     const door: Door = {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#000000",
       room_id: 2,
     };

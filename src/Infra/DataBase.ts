@@ -2,7 +2,6 @@ import mysql, { Connection } from "mysql";
 import dotenv from "dotenv";
 dotenv.config();
 
-// TODO: pensar nessa conexão
 export default class DataBase {
   connection: Connection;
   constructor() {

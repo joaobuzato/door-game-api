@@ -36,9 +36,9 @@ export class DoorRepository implements Repository<Door> {
     return items;
   }
   async insert(door: Door) {
-    const query = `INSERT INTO doors (path, color, room_id) VALUES (?,?,?)`;
+    const query = `INSERT INTO doors (path, text, color, room_id) VALUES (?,?,?,?)`;
     return this.dataBase
-      .query<Door>(query, [door.path, door.color, door.room_id])
+      .query<Door>(query, [door.path, door.text, door.color, door.room_id])
       .then(() => {
         return { success: true };
       })
@@ -47,9 +47,15 @@ export class DoorRepository implements Repository<Door> {
       });
   }
   async update(door: Door) {
-    const query = `UPDATE doors SET path = ?, color = ?, room_id = ? WHERE id = ?`;
+    const query = `UPDATE doors SET path = ?, text = ?, color = ?, room_id = ? WHERE id = ?`;
     return this.dataBase
-      .query<Door>(query, [door.path, door.color, door.room_id, door.id])
+      .query<Door>(query, [
+        door.path,
+        door.text,
+        door.color,
+        door.room_id,
+        door.id,
+      ])
       .then(() => {
         return { success: true };
       })

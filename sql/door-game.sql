@@ -22,6 +22,7 @@ CREATE TABLE `conditions` (
 CREATE TABLE `doors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `path` varchar(100) NOT NULL DEFAULT '',
+  `text` varchar(100) NOT NULL DEFAULT '',
   `color` varchar(7) NOT NULL DEFAULT '',
   `room_id` int NOT NULL,
   PRIMARY KEY (`id`)

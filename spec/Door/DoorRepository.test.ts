@@ -11,18 +11,21 @@ describe("DoorRepository", () => {
       {
         id: 1,
         path: "path",
+        text: "Text",
         color: "#000000",
         room_id: 2,
       },
       {
         id: 2,
         path: "path",
+        text: "Text",
         color: "#033000",
         room_id: 5,
       },
       {
-        id: 1,
+        id: 3,
         path: "patfh",
+        text: "Text",
         color: "#000fd0",
         room_id: 2,
       },
@@ -54,6 +57,7 @@ describe("DoorRepository", () => {
       {
         id: 1,
         path: "patfh",
+        text: "Text",
         color: "#000fd0",
         room_id: 2,
       },
@@ -107,6 +111,7 @@ describe("DoorRepository", () => {
     const door = new Door(
       {
         path: "patfh",
+        text: "Text",
         color: "#000fd0",
         room_id: 2,
       },
@@ -122,8 +127,8 @@ describe("DoorRepository", () => {
       await repository.insert(door);
 
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "INSERT INTO doors (path, color, room_id) VALUES (?,?,?)",
-        [door.path, door.color, door.room_id]
+        "INSERT INTO doors (path, text, color, room_id) VALUES (?,?,?,?)",
+        [door.path, door.text, door.color, door.room_id]
       );
     });
 
@@ -134,8 +139,8 @@ describe("DoorRepository", () => {
         success: false,
       });
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "INSERT INTO doors (path, color, room_id) VALUES (?,?,?)",
-        [door.path, door.color, door.room_id]
+        "INSERT INTO doors (path, text, color, room_id) VALUES (?,?,?,?)",
+        [door.path, door.text, door.color, door.room_id]
       );
     });
   });
@@ -143,6 +148,7 @@ describe("DoorRepository", () => {
     const door = new Door(
       {
         path: "patfh",
+        text: "Text",
         color: "#000fd0",
         room_id: 2,
       },
@@ -161,8 +167,8 @@ describe("DoorRepository", () => {
       await repository.update(door);
 
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "UPDATE doors SET path = ?, color = ?, room_id = ? WHERE id = ?",
-        [door.path, door.color, door.room_id, door.id]
+        "UPDATE doors SET path = ?, text = ?, color = ?, room_id = ? WHERE id = ?",
+        [door.path, door.text, door.color, door.room_id, door.id]
       );
     });
 
@@ -173,8 +179,8 @@ describe("DoorRepository", () => {
         success: false,
       });
       expect(databaseMock.query).toHaveBeenCalledWith(
-        "UPDATE doors SET path = ?, color = ?, room_id = ? WHERE id = ?",
-        [door.path, door.color, door.room_id, door.id]
+        "UPDATE doors SET path = ?, text = ?, color = ?, room_id = ? WHERE id = ?",
+        [door.path, door.text, door.color, door.room_id, door.id]
       );
     });
   });

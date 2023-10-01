@@ -12,15 +12,15 @@ describe("doorService", () => {
     const bigPath = "a".repeat(31);
 
     test.each([
-      { id: 0, path: "", color: "", room_id: 0 },
-      { id: 0, path: "abcde", color: "abcabc", room_id: 0 },
-      { id: 0, path: "", color: "igfdsahfdgsaf", room_id: 1 },
-      { id: 0, path: "adsffdas", color: "", room_id: 1 },
-      { id: 0, path: "dsadsadas", color: "#color1", room_id: 0 },
-      { id: 0, path: "", color: "#color3", room_id: 1 },
-      { id: 0, path: "", color: "", room_id: 0 },
-      { id: 0, path: bigPath, color: "#color1", room_id: 1 },
-      { id: 0, path: "path", color: "olor1", room_id: 1 },
+      { id: 0, text: "Text", path: "", color: "", room_id: 0 },
+      { id: 0, text: "Text", path: "", color: "igfdsahfdgsaf", room_id: 1 },
+      { id: 0, text: "Text", path: "abcde", color: "abcabc", room_id: 0 },
+      { id: 0, text: "Text", path: "adsffdas", color: "", room_id: 1 },
+      { id: 0, text: "Text", path: "dsadsadas", color: "#color1", room_id: 0 },
+      { id: 0, text: "Text", path: "", color: "#color3", room_id: 1 },
+      { id: 0, text: "Text", path: "", color: "", room_id: 0 },
+      { id: 0, text: "Text", path: bigPath, color: "#color1", room_id: 1 },
+      { id: 0, text: "Text", path: "path", color: "olor1", room_id: 1 },
     ])("should return invalid if door is not valid", (door) => {
       const isValid = service.validate(door);
       expect(isValid).toBe(false);
@@ -32,12 +32,14 @@ describe("doorService", () => {
       {
         id: 1,
         path: "path",
+        text: "Text",
         color: "#color1",
         room_id: 1,
       },
       {
         id: 2,
         path: "path 2",
+        text: "Text",
         color: "#color1",
         room_id: 1,
       },
@@ -63,6 +65,7 @@ describe("doorService", () => {
     const door: Door = {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#color1",
       room_id: 1,
     };
@@ -90,6 +93,7 @@ describe("doorService", () => {
     const door: Door = new Door(
       {
         path: "path",
+        text: "Text",
         color: "#color1",
         room_id: 1,
       },
@@ -125,6 +129,7 @@ describe("doorService", () => {
     const door: Door = {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#color1",
       room_id: 1,
     };

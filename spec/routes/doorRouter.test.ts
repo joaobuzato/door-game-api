@@ -9,18 +9,21 @@ describe("GET /doors", () => {
     {
       id: 1,
       path: "path",
+      text: "Text",
       color: "#000000",
       room_id: 2,
     },
     {
       id: 2,
       path: "path",
+      text: "Text",
       color: "#033000",
       room_id: 5,
     },
     {
       id: 1,
       path: "patfh",
+      text: "Text",
       color: "#000fd0",
       room_id: 2,
     },
@@ -58,6 +61,7 @@ describe("GET /doors/:id", () => {
   const door: Door = {
     id: 1,
     path: "patfh",
+    text: "Text",
     color: "#000fd0",
     room_id: 2,
   };
@@ -110,6 +114,7 @@ describe("POST /doors/:id", () => {
 
   const door = new Door({
     path: "patfh",
+    text: "Text",
     color: "#000fd0",
     room_id: 2,
   });
@@ -156,6 +161,7 @@ describe("PUT /doors/:id", () => {
   const door = new Door(
     {
       path: "patfh",
+      text: "Text",
       color: "#000fd0",
       room_id: 2,
     },
