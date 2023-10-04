@@ -13,8 +13,8 @@ export default class DoorController implements Controller<Door> {
     this.service = new DoorService(repository);
   }
 
-  async getAll() {
-    return await this.service.getAll();
+  async getAll(filters?: { roomId?: string }) {
+    return await this.service.getAll(filters);
   }
   async getById(id: number) {
     return await this.service.getById(id);

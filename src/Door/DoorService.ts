@@ -7,8 +7,8 @@ export class DoorService implements Service<Door> {
   constructor(repository: Repository<Door>) {
     this.repository = repository;
   }
-  async getAll() {
-    return await this.repository.getAll();
+  async getAll(filters?: { roomId?: string }) {
+    return await this.repository.getAll(filters);
   }
   async getById(id: number) {
     const item = await this.repository.getById(id);

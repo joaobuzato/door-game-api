@@ -10,7 +10,8 @@ doorsRouter.get(
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
   async (request, response) => {
     try {
-      const body = await controller.getAll();
+      const { roomId } = request.params;
+      const body = await controller.getAll({ roomId: roomId });
       response.json(body);
       return response.status(200);
     } catch (e) {
@@ -21,25 +22,6 @@ doorsRouter.get(
   }
 );
 
-doorsRouter.get(
-  "/doors/:id",
-  process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,
-  async (request, response) => {
-    try {
-      const { id } = request.params;
-      const body = await controller.getById(Number(id));
-      if (!body) {
-        return response.status(404).json({ message: "Door não encontrado" });
-      }
-      response.json(body);
-      return response.status(200);
-    } catch (e) {
-      if (e instanceof Error) {
-        return response.status(400).json({ message: "Erro ao obter door" });
-      }
-    }
-  }
-);
 doorsRouter.get(
   "/doors/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,

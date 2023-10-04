@@ -43,13 +43,17 @@ describe("DoorRepository", () => {
       const result = await repository.getAll();
 
       expect(result).toEqual(doors);
-      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM doors");
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM doors d WHERE 1 "
+      );
     });
     test("should throw if promise is rejected", async () => {
       databaseMock.query.mockRejectedValue([]);
 
       await expect(repository.getAll()).rejects.toStrictEqual([]);
-      expect(databaseMock.query).toHaveBeenCalledWith("SELECT * FROM doors");
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM doors d WHERE 1 "
+      );
     });
   });
   describe("getById", () => {

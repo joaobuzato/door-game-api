@@ -7,8 +7,11 @@ export class DoorRepository implements Repository<Door> {
     this.dataBase = dataBase;
   }
 
-  async getAll() {
-    const query = "SELECT * FROM doors";
+  async getAll(filters?: { roomId?: string }) {
+    const filtersString = filters?.roomId
+      ? ` AND d.room_id = ${filters.roomId}`
+      : "";
+    const query = `SELECT * FROM doors d WHERE 1 ${filtersString}`;
     const items: Door[] = [];
     const result: Door[] = await this.dataBase.query<Door>(query);
     result.forEach((row: Door) => {
