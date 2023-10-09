@@ -16,7 +16,6 @@ export class DoorRepository implements Repository<Door> {
     const result: Door[] = await this.dataBase.query<Door>(query);
     result.forEach((row: Door) => {
       const door = this.mount(row);
-      console.log("afdadfd");
       items.push(door);
     });
     return items;
