@@ -123,6 +123,66 @@ describe("RoomRepository", () => {
       );
     });
   });
+  describe("getByPath", () => {
+    const rooms: Room[] = [
+      {
+        id: 3,
+        title: "title 3",
+        text: "texasdasdt",
+        path: "path",
+        actions: [],
+        doors: [],
+        extendedTexts: [],
+      },
+    ];
+
+    const databaseMock = mock<DataBase>();
+    const repository = new RoomRepository(databaseMock);
+
+    beforeEach(() => {
+      databaseMock.query.mockClear();
+      repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
+      repository.extendedTextRepository.getByRoomId = jest
+        .fn()
+        .mockResolvedValue([]);
+    });
+    test("should getByPath correctly", async () => {
+      const path = "path";
+      databaseMock.query.mockResolvedValue(rooms);
+
+      const result = await repository.getByPath(path);
+
+      expect(result).toEqual(rooms[0]);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM rooms WHERE path = ?",
+        [path]
+      );
+    });
+    test("should reject if promise is rejected", async () => {
+      const path = "path";
+
+      databaseMock.query.mockRejectedValue([]);
+
+      await expect(repository.getByPath(path)).rejects.toStrictEqual([]);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM rooms WHERE path = ?",
+        [path]
+      );
+    });
+    test("should return null if there is no room", async () => {
+      const path = "path";
+      databaseMock.query.mockResolvedValue([]);
+
+      const result = await repository.getByPath(path);
+
+      expect(result).toEqual(null);
+      expect(databaseMock.query).toHaveBeenCalledWith(
+        "SELECT * FROM rooms WHERE path = ?",
+        [path]
+      );
+    });
+  });
   describe("insert", () => {
     const databaseMock = mock<DataBase>();
     const repository = new RoomRepository(databaseMock);

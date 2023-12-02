@@ -31,6 +31,11 @@ export class RoomRepository implements Repository<Room> {
     const result = await this.dataBase.query<Room>(query, [id]);
     return result.length > 0 ? result[0] : null;
   }
+  async getByPath(path: string) {
+    const query = `SELECT * FROM rooms WHERE path = ?`;
+    const result = await this.dataBase.query<Room>(query, [path]);
+    return result.length > 0 ? result[0] : null;
+  }
   async insert(room: Room) {
     const query = `INSERT INTO rooms (title,text,path) VALUES (?,?,?)`;
     return this.dataBase

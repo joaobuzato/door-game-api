@@ -108,6 +108,61 @@ describe("GET /rooms/:id", () => {
   });
 });
 
+describe("GET /rooms/path/:path", () => {
+  let getByPathSpy: jest.SpyInstance;
+  const path = "path";
+  const room: Room = {
+    id: 1,
+    title: "title",
+    text: "text",
+    path: "path",
+    actions: [],
+    doors: [],
+    extendedTexts: [],
+  };
+  beforeEach(() => {
+    getByPathSpy = jest.spyOn(RoomController.prototype, "getByPath");
+  });
+  afterEach(() => {
+    getByPathSpy.mockClear();
+  });
+  test("should respond with JSON data and status 200 when get by id", async () => {
+    getByPathSpy.mockResolvedValue(room);
+
+    const response = await request(app).get(`/rooms/path/${path}`);
+
+    expect(response.status).toBe(200);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual(room);
+    expect(getByPathSpy).toBeCalledTimes(1);
+    expect(getByPathSpy).toBeCalledWith(path);
+  });
+
+  test("should respond with status 404 when id not found on get by id", async () => {
+    getByPathSpy.mockResolvedValue(null);
+
+    const response = await request(app).get(`/rooms/path/${path}`);
+
+    expect(response.status).toBe(404);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual({ message: "Room não encontrado" });
+    expect(getByPathSpy).toBeCalledTimes(1);
+    expect(getByPathSpy).toBeCalledWith(path);
+  });
+
+  test("should handle errors and respond with JSON data and status 400 on get by id", async () => {
+    getByPathSpy.mockRejectedValue(new Error("error"));
+
+    const response = await request(app).get(`/rooms/path/${path}`);
+
+    expect(getByPathSpy).toBeCalledTimes(1);
+    expect(getByPathSpy).toBeCalledWith(path);
+    expect(response.type).toBe("application/json");
+    expect(response.body).toEqual({ message: "Erro ao obter room" });
+    expect(response.status).toBe(400);
+  });
+});
+
 describe("POST /rooms/:id", () => {
   let insertSpy: jest.SpyInstance;
 

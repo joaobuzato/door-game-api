@@ -15,7 +15,20 @@ roomsRouter.get("/rooms", async (request, response) => {
     }
   }
 });
-
+roomsRouter.get("/rooms/path/:path", async (request, response) => {
+  try {
+    const { path } = request.params;
+    const body = await controller.getByPath(path);
+    if (!body) {
+      return response.status(404).json({ message: "Room não encontrado" });
+    }
+    return response.status(200).json(body);
+  } catch (e) {
+    if (e instanceof Error) {
+      return response.status(400).json({ message: "Erro ao obter room" });
+    }
+  }
+});
 roomsRouter.get(
   "/rooms/:id",
   process.env.NODE_ENV === "test" ? emptyAuthMiddleware : authenticateToken,

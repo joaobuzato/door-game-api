@@ -97,6 +97,37 @@ describe("roomService", () => {
       expect(repositoryMock.getById).toBeCalledWith(id);
     });
   });
+
+  describe("getByPath", () => {
+    const room: Room = {
+      id: 1,
+      title: "title",
+      text: "text",
+      path: "path",
+      actions: [],
+      doors: [],
+      extendedTexts: [],
+    };
+    beforeEach(() => {
+      repositoryMock.getByPath.mockClear();
+    });
+    test("should getByPath Correctly", async () => {
+      repositoryMock.getByPath.mockResolvedValue(room);
+
+      const result = await service.getByPath(room.path);
+
+      expect(result).toEqual(room);
+      expect(repositoryMock.getByPath).toBeCalledWith(room.path);
+    });
+    test("should propagate error if there is a throw in repository", async () => {
+      repositoryMock.getByPath.mockRejectedValue({ success: false });
+
+      await expect(service.getByPath(room.path)).rejects.toStrictEqual({
+        success: false,
+      });
+      expect(repositoryMock.getByPath).toBeCalledWith(room.path);
+    });
+  });
   describe("insert", () => {
     const room: Room = new Room(
       {

@@ -15,7 +15,7 @@ export default class routes {
     this.router = Router();
 
     const corsOptions = {
-      origin: "*",
+      origin: "http://localhost:3000",
       optionsSuccessStatus: 200,
     };
 

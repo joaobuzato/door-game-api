@@ -72,6 +72,30 @@ describe("roomRepository", () => {
       expect(controller.service.getById).toBeCalledTimes(1);
     });
   });
+  describe("getByPath", () => {
+    const room: Room = {
+      id: 1,
+      title: "title",
+      text: "text",
+      path: "path",
+      actions: [],
+      doors: [],
+      extendedTexts: [],
+    };
+    test("should getByPath Correctly", async () => {
+      controller.service.getByPath = jest.fn().mockResolvedValue(room);
+
+      const result = await controller.getByPath(room.path);
+
+      expect(result).toEqual(room);
+      expect(controller.service.getByPath).toBeCalledWith(room.path);
+    });
+    test("should propagate error if there is a throw in Service", async () => {
+      controller.service.getByPath = jest.fn().mockRejectedValue(null);
+      await expect(controller.getByPath(room.path)).rejects.toStrictEqual(null);
+      expect(controller.service.getByPath).toBeCalledTimes(1);
+    });
+  });
   describe("insert", () => {
     const room: Room = {
       id: 1,

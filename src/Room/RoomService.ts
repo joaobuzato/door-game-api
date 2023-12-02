@@ -1,10 +1,10 @@
-import { Repository } from "../Interfaces/Repository";
 import { Service } from "../Interfaces/Service";
 import { Room } from "./Room";
+import RoomRepository from "./RoomRepository";
 
 export class RoomService implements Service<Room> {
-  repository: Repository<Room>;
-  constructor(repository: Repository<Room>) {
+  repository: RoomRepository;
+  constructor(repository: RoomRepository) {
     this.repository = repository;
   }
   async getAll() {
@@ -12,6 +12,9 @@ export class RoomService implements Service<Room> {
   }
   async getById(id: number) {
     return await this.repository.getById(id);
+  }
+  async getByPath(path: string) {
+    return await this.repository.getByPath(path);
   }
   async insert(room: Room) {
     if (!this.validate(room)) {
