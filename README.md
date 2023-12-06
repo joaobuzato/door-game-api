@@ -1,16 +1,14 @@
 # door-game-api
 
-Esta é uma API em Node JS com Express, para manipulação de um banco de dados SQL, implementando o modelo MVC para o CRUD das entidades.
+Esta é uma API em Node JS com Express, para manipulação de um banco de dados SQL, implementando um modelo de camadas para o CRUD das entidades.
 
 ## Como rodar?
 
-- rodar sudo apt-get install mysql-server
+- instalar o mysql 
 
-- rodar mysql -u `usuario` -p `senha do usuario`
+- executar o script presente no arquivo sql/door_game.sql
 
-- executar o arquivo sql/door_Game.sql
-
-- no projeto, rodar npm i
+- npm i
 
 - npm run start
 
