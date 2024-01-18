@@ -148,7 +148,7 @@ describe("conditionService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue({ success: false });
+      repositoryMock.insert.mockResolvedValue({ lastId: 0, success: false });
 
       await service.insert(condition);
 
@@ -157,14 +157,16 @@ describe("conditionService", () => {
     test("should throw error if element1 is not valid", async () => {
       const conditionTest = { ...condition, element1: "" };
       await expect(service.insert(conditionTest)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      repositoryMock.insert.mockRejectedValue({ success: false });
+      repositoryMock.insert.mockRejectedValue({ lastId: 0, success: false });
 
       await expect(service.insert(condition)).rejects.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledWith(condition);

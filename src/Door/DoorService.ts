@@ -16,7 +16,7 @@ export class DoorService implements Service<Door> {
   }
   async insert(door: Door) {
     if (!this.validate(door)) {
-      return { success: false };
+      return { lastId: 0, success: false };
     }
     return await this.repository.insert(door);
   }

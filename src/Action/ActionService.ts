@@ -15,7 +15,7 @@ export class ActionService implements Service<Action> {
   }
   async insert(action: Action) {
     if (!this.validate(action)) {
-      return { success: false };
+      return { lastId: 0, success: false };
     }
     return await this.repository.insert(action);
   }

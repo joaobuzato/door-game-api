@@ -15,7 +15,7 @@ export class ExtendedTextService implements Service<ExtendedText> {
   }
   async insert(extendedText: ExtendedText) {
     if (!this.validate(extendedText)) {
-      return { success: false };
+      return { lastId: 0, success: false };
     }
     return await this.repository.insert(extendedText);
   }

@@ -116,11 +116,12 @@ describe("extendedTextRepository", () => {
       databaseMock.query.mockClear();
     });
     test("should insert correctly", async () => {
-      databaseMock.query.mockResolvedValue([]);
+      databaseMock.query.mockResolvedValue([{ id: 1 }]);
 
       await repository.insert(extendedText);
 
-      expect(databaseMock.query).toHaveBeenCalledWith(
+      expect(databaseMock.query).toHaveBeenNthCalledWith(
+        1,
         "INSERT INTO extended_texts (sentence, text, room_id) VALUES (?,?,?)",
         [extendedText.sentence, extendedText.text, extendedText.room_id]
       );
@@ -130,6 +131,7 @@ describe("extendedTextRepository", () => {
       databaseMock.query.mockRejectedValue([]);
 
       await expect(repository.insert(extendedText)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(databaseMock.query).toHaveBeenCalledWith(

@@ -58,9 +58,11 @@ roomsRouter.post(
       .insert(room)
       .then((result) => {
         if (result.success)
-          return response
-            .status(201)
-            .json({ success: true, message: "Inserido" });
+          return response.status(201).json({
+            lastId: result.lastId != 0 ? result.lastId : undefined,
+            success: true,
+            message: "Inserido",
+          });
         return response
           .status(400)
           .json({ success: false, message: "Erro ao inserir room" });

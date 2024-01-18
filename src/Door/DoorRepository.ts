@@ -43,10 +43,10 @@ export class DoorRepository implements Repository<Door> {
     return this.dataBase
       .query<Door>(query, [door.path, door.text, door.color, door.room_id])
       .then(() => {
-        return { success: true };
+        return { lastId: 0, success: true };
       })
       .catch(() => {
-        return { success: false };
+        return { lastId: 0, success: false };
       });
   }
   async update(door: Door) {

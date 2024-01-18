@@ -52,10 +52,10 @@ export class ExtendedTextRepository implements Repository<ExtendedText> {
         extendedText.room_id,
       ])
       .then(() => {
-        return { success: true };
+        return { lastId: 0, success: true };
       })
       .catch(() => {
-        return { success: false };
+        return { lastId: 0, success: false };
       });
   }
   async update(extendedText: ExtendedText) {

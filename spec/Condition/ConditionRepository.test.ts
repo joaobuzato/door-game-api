@@ -147,13 +147,15 @@ describe("ConditionRepository", () => {
       databaseMock.query.mockClear();
     });
     test("should insert correctly", async () => {
-      databaseMock.query.mockResolvedValue([]);
+      databaseMock.query.mockResolvedValue([{ id: 1 }]);
 
       await expect(repository.insert(condition)).resolves.toStrictEqual({
+        lastId: 0,
         success: true,
       });
 
-      expect(databaseMock.query).toHaveBeenCalledWith(
+      expect(databaseMock.query).toHaveBeenNthCalledWith(
+        1,
         "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
         [
           condition.element1,
@@ -169,9 +171,11 @@ describe("ConditionRepository", () => {
       databaseMock.query.mockRejectedValue([]);
 
       await expect(repository.insert(condition)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
-      expect(databaseMock.query).toHaveBeenCalledWith(
+      expect(databaseMock.query).toHaveBeenNthCalledWith(
+        1,
         "INSERT INTO conditions (element1, type, element2, action_id) VALUES (?,?,?,?)",
         [
           condition.element1,

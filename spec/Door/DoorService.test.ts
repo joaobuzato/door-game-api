@@ -103,7 +103,7 @@ describe("doorService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue({ success: false });
+      repositoryMock.insert.mockResolvedValue({ lastId: 0, success: false });
 
       await service.insert(door);
 
@@ -112,14 +112,16 @@ describe("doorService", () => {
     test("should throw error if color is not valid", async () => {
       const doorTest = { ...door, color: "" };
       await expect(service.insert(doorTest)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      repositoryMock.insert.mockRejectedValue({ success: false });
+      repositoryMock.insert.mockRejectedValue({ lastId: 0, success: false });
 
       await expect(service.insert(door)).rejects.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledWith(door);

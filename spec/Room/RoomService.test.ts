@@ -144,7 +144,7 @@ describe("roomService", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue({ success: true });
+      repositoryMock.insert.mockResolvedValue({ lastId: 0, success: true });
 
       await service.insert(room);
 
@@ -153,14 +153,16 @@ describe("roomService", () => {
     test("should throw error if text is not valid", async () => {
       const roomTest = { ...room, title: "" };
       await expect(service.insert(roomTest)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      repositoryMock.insert.mockRejectedValue({ success: false });
+      repositoryMock.insert.mockRejectedValue({ lastId: 0, success: false });
 
       await expect(service.insert(room)).rejects.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledWith(room);

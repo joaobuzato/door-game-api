@@ -29,23 +29,29 @@ export class RoomRepository implements Repository<Room> {
   async getById(id: number) {
     const query = `SELECT * FROM rooms WHERE id = ?`;
     const result = await this.dataBase.query<Room>(query, [id]);
-    return result.length > 0 ? result[0] : null;
+    return result.length === 0 ? null : this.mount(result[0]);
   }
   async getByPath(path: string) {
     const query = `SELECT * FROM rooms WHERE path = ?`;
     const result = await this.dataBase.query<Room>(query, [path]);
-    return result.length > 0 ? result[0] : null;
+    return result.length === 0 ? null : this.mount(result[0]);
   }
   async insert(room: Room) {
     const query = `INSERT INTO rooms (title,text,path) VALUES (?,?,?)`;
     return this.dataBase
       .query<Room>(query, [room.title, room.text, room.path])
       .then(() => {
-        return { success: true };
+        return this.dataBase
+          .query<{ id: number }>(
+            "SELECT id FROM rooms ORDER BY id DESC LIMIT 1"
+          )
+          .then((lastId) => {
+            return { lastId: lastId[0].id, success: true };
+          });
       })
-      .catch(() => {
-        console.log("catch");
-        return { success: false };
+      .catch((e) => {
+        console.log("catch", e);
+        return { lastId: 0, success: false };
       });
   }
   async update(room: Room) {

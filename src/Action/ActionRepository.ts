@@ -50,10 +50,10 @@ export class ActionRepository implements Repository<Action> {
         action.room_id,
       ])
       .then(() => {
-        return { success: true };
+        return { lastId: 0, success: true };
       })
       .catch(() => {
-        return { success: false };
+        return { lastId: 0, success: false };
       });
   }
   async update(action: Action) {

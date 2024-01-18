@@ -15,7 +15,7 @@ export class ConditionService implements Service<Condition> {
   }
   async insert(condition: Condition) {
     if (!this.validate(condition)) {
-      return { success: false };
+      return { lastId: 0, success: false };
     }
     return await this.repository.insert(condition);
   }

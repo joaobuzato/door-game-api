@@ -208,9 +208,10 @@ describe("RoomRepository", () => {
         .mockResolvedValue([]);
     });
     test("should insert correctly", async () => {
-      databaseMock.query.mockResolvedValue([]);
+      databaseMock.query.mockResolvedValue([{ id: 1 }]);
 
       await expect(repository.insert(room)).resolves.toStrictEqual({
+        lastId: 1,
         success: true,
       });
       expect(databaseMock.query).toHaveBeenCalledWith(
@@ -223,9 +224,11 @@ describe("RoomRepository", () => {
       databaseMock.query.mockRejectedValue([]);
 
       await expect(repository.insert(room)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
-      expect(databaseMock.query).toHaveBeenCalledWith(
+      expect(databaseMock.query).toHaveBeenNthCalledWith(
+        1,
         "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
         [room.title, room.text, room.path]
       );

@@ -34,10 +34,10 @@ export class ConditionRepository implements Repository<Condition> {
         condition.id,
       ])
       .then(() => {
-        return { success: true };
+        return { lastId: 0, success: true };
       })
       .catch(() => {
-        return { success: false };
+        return { lastId: 0, success: false };
       });
   }
   async update(condition: Condition) {

@@ -126,7 +126,7 @@ describe("DoorRepository", () => {
       databaseMock.query.mockClear();
     });
     test("should insert correctly", async () => {
-      databaseMock.query.mockResolvedValue([]);
+      databaseMock.query.mockResolvedValue([{ id: 1 }]);
 
       await repository.insert(door);
 
@@ -140,6 +140,7 @@ describe("DoorRepository", () => {
       databaseMock.query.mockRejectedValue([]);
 
       await expect(repository.insert(door)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(databaseMock.query).toHaveBeenCalledWith(

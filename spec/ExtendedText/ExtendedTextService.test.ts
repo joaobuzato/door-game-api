@@ -101,7 +101,7 @@ describe("extendedTextRepository", () => {
       repositoryMock.insert.mockClear();
     });
     test("should insert Correctly", async () => {
-      repositoryMock.insert.mockResolvedValue({ success: true });
+      repositoryMock.insert.mockResolvedValue({ lastId: 0, success: true });
 
       await service.insert(extendedText);
 
@@ -110,14 +110,16 @@ describe("extendedTextRepository", () => {
     test("should reject promise if text is not valid", async () => {
       const extendedTextTest = { ...extendedText, text: "" };
       await expect(service.insert(extendedTextTest)).resolves.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledTimes(0);
     });
     test("should propagate error if there is a throw in repository", async () => {
-      repositoryMock.insert.mockRejectedValue({ success: false });
+      repositoryMock.insert.mockRejectedValue({ lastId: 0, success: false });
 
       await expect(service.insert(extendedText)).rejects.toStrictEqual({
+        lastId: 0,
         success: false,
       });
       expect(repositoryMock.insert).toBeCalledWith(extendedText);

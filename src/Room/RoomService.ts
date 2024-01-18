@@ -18,7 +18,7 @@ export class RoomService implements Service<Room> {
   }
   async insert(room: Room) {
     if (!this.validate(room)) {
-      return { success: false };
+      return { lastId: 0, success: false };
     }
     return await this.repository.insert(room);
   }
