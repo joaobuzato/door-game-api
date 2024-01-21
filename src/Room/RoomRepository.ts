@@ -39,15 +39,9 @@ export class RoomRepository implements Repository<Room> {
   async insert(room: Room) {
     const query = `INSERT INTO rooms (title,text,path) VALUES (?,?,?)`;
     return this.dataBase
-      .query<Room>(query, [room.title, room.text, room.path])
-      .then(() => {
-        return this.dataBase
-          .query<{ id: number }>(
-            "SELECT id FROM rooms ORDER BY id DESC LIMIT 1"
-          )
-          .then((lastId) => {
-            return { lastId: lastId[0].id, success: true };
-          });
+      .insertQuery(query, [room.title, room.text, room.path])
+      .then((result) => {
+        return { lastId: result.insertId, success: true };
       })
       .catch((e) => {
         console.log("catch", e);

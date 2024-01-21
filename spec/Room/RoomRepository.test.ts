@@ -4,6 +4,7 @@ import { Room } from "../../src/Room/Room";
 import { RoomRepository } from "../../src/Room/RoomRepository";
 import DataBase from "../../src/Infra/DataBase";
 import { mock } from "jest-mock-extended";
+import { OkPacket } from "mysql";
 
 describe("RoomRepository", () => {
   describe("getAll", () => {
@@ -42,6 +43,7 @@ describe("RoomRepository", () => {
 
     beforeEach(() => {
       databaseMock.query.mockClear();
+      databaseMock.insertQuery.mockClear();
       repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.extendedTextRepository.getByRoomId = jest
@@ -200,7 +202,7 @@ describe("RoomRepository", () => {
     );
 
     beforeEach(() => {
-      databaseMock.query.mockClear();
+      databaseMock.insertQuery.mockClear();
       repository.actionRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.doorRepository.getByRoomId = jest.fn().mockResolvedValue([]);
       repository.extendedTextRepository.getByRoomId = jest
@@ -208,26 +210,26 @@ describe("RoomRepository", () => {
         .mockResolvedValue([]);
     });
     test("should insert correctly", async () => {
-      databaseMock.query.mockResolvedValue([{ id: 1 }]);
+      databaseMock.insertQuery.mockResolvedValue({ insertId: 1 } as OkPacket);
 
       await expect(repository.insert(room)).resolves.toStrictEqual({
         lastId: 1,
         success: true,
       });
-      expect(databaseMock.query).toHaveBeenCalledWith(
+      expect(databaseMock.insertQuery).toHaveBeenCalledWith(
         "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
         [room.title, room.text, room.path]
       );
     });
 
     test("should reject if promise is rejected", async () => {
-      databaseMock.query.mockRejectedValue([]);
+      databaseMock.insertQuery.mockRejectedValue([]);
 
       await expect(repository.insert(room)).resolves.toStrictEqual({
         lastId: 0,
         success: false,
       });
-      expect(databaseMock.query).toHaveBeenNthCalledWith(
+      expect(databaseMock.insertQuery).toHaveBeenNthCalledWith(
         1,
         "INSERT INTO rooms (title,text,path) VALUES (?,?,?)",
         [room.title, room.text, room.path]
